@@ -7,7 +7,9 @@ use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ItemController;
 
 Route::get('/', function () {
-    return view('welcome');
+
+    return redirect('/dashboard');
+
 });
 
 Route::get('/me', function () {
@@ -44,7 +46,7 @@ Route::middleware('auth')->get('/my-items', function () {
     /** @var \App\Models\User $user */
     $user = Auth::user();
 
-    return $user()->items()->with('category')->get();
+    return $user->items()->with('category')->get();
 });
 
 Route::middleware('auth')->post('/rentals', [RentalController::class, 'store']);
