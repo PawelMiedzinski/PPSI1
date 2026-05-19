@@ -64,4 +64,10 @@ Route::middleware('auth')->patch('/rentals/{rental}/cancel', [RentalController::
 
 Route::resource('items', ItemController::class);
 
+Route::get('/settings', function() {
+
+return view('settings');
+
+})->middleware('auth');
+
 require __DIR__.'/auth.php';
