@@ -15,6 +15,27 @@ overflow-hidden
 <div
 style="
 height:260px;
+position:relative;
+overflow:hidden;
+"
+>
+
+@if(Auth::user()->banner)
+
+<img
+src="{{ asset('storage/' . Auth::user()->banner) }}"
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+"
+>
+
+@else
+
+<div
+style="
+height:100%;
 
 background:
 linear-gradient(
@@ -24,7 +45,6 @@ linear-gradient(
 #0f172a
 );
 
-position:relative;
 "
 >
 
@@ -35,11 +55,9 @@ right:50px;
 top:20px;
 
 font-size:120px;
-
 font-weight:900;
 
 opacity:.08;
-
 color:white;
 "
 >
@@ -47,6 +65,10 @@ color:white;
 MR
 
 </div>
+
+</div>
+
+@endif
 
 </div>
 
@@ -71,11 +93,36 @@ gx-5
 
 <div
 class="
-rounded-circle
 shadow-lg
 border
 border-5
 border-white
+overflow-hidden
+rounded-circle
+bg-white
+"
+style="
+width:170px;
+height:170px;
+margin-top:-90px;
+"
+>
+
+@if(Auth::user()->avatar)
+
+<img
+src="{{ asset('storage/' . Auth::user()->avatar) }}"
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+"
+>
+
+@else
+
+<div
+class="
 d-flex
 align-items-center
 justify-content-center
@@ -83,12 +130,10 @@ fw-bold
 text-white
 "
 style="
-width:170px;
-height:170px;
+width:100%;
+height:100%;
 
 font-size:60px;
-
-margin-top:-90px;
 
 background:
 linear-gradient(
@@ -100,6 +145,10 @@ linear-gradient(
 >
 
 {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+
+</div>
+
+@endif
 
 </div>
 
@@ -150,7 +199,7 @@ py-2
 "
 >
 
-Member since 2026
+Member since {{ Auth::user()->created_at->format('Y') }}
 
 </span>
 
@@ -203,7 +252,14 @@ Settings
 
 <div class="col-md-3">
 
-<div class="card shadow-sm border-0 rounded-4">
+<div
+class="
+card
+shadow-sm
+border-0
+rounded-4
+"
+>
 
 <div class="card-body">
 
@@ -228,7 +284,14 @@ Items
 
 <div class="col-md-3">
 
-<div class="card shadow-sm border-0 rounded-4">
+<div
+class="
+card
+shadow-sm
+border-0
+rounded-4
+"
+>
 
 <div class="card-body">
 
@@ -253,7 +316,14 @@ Rentals
 
 <div class="col-md-3">
 
-<div class="card shadow-sm border-0 rounded-4">
+<div
+class="
+card
+shadow-sm
+border-0
+rounded-4
+"
+>
 
 <div class="card-body">
 
@@ -278,7 +348,14 @@ Rating
 
 <div class="col-md-3">
 
-<div class="card shadow-sm border-0 rounded-4">
+<div
+class="
+card
+shadow-sm
+border-0
+rounded-4
+"
+>
 
 <div class="card-body">
 

@@ -16,7 +16,6 @@ blur(18px);
 
 border-bottom:
 1px solid rgba(255,255,255,.05);
-
 "
 
 >
@@ -242,27 +241,88 @@ gap-3
 
 class="
 avatar-premium
+overflow-hidden
+flex-shrink-0
+d-flex
+align-items-center
+justify-content-center
+"
+
+style="
+width:58px;
+height:58px;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1d4ed8
+);
+
+border:
+2px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 8px 25px rgba(37,99,235,.25);
+"
+
+>
+
+@if(Auth::user()->avatar)
+
+<img
+
+src="{{ asset('storage/' . Auth::user()->avatar) }}"
+
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+"
+
+>
+
+@else
+
+<span
+
+style="
+font-size:24px;
+font-weight:800;
+color:white;
 "
 
 >
 
 {{ strtoupper(substr(Auth::user()->name,0,1)) }}
 
+</span>
+
+@endif
+
 </div>
 
 
 <div
+
 class="
 d-none
 d-xl-block
 "
+
 >
 
 <div
 
 class="
 text-white
-fw-semibold
+fw-bold
+"
+
+style="
+font-size:15px;
 "
 
 >

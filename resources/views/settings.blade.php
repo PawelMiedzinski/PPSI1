@@ -19,84 +19,81 @@ style="top:100px;"
 
 <div class="card-body">
 
-<h5
-class="
-fw-bold
-mb-4
-"
->
+<h5 class="fw-bold mb-4">
 
 Settings
 
 </h5>
 
 <div
-class="
-list-group
-list-group-flush
-"
+class="list-group"
+role="tablist"
 >
 
-<a
-href="#profile"
+<button
 class="
 list-group-item
 list-group-item-action
-border-0
 rounded-3
 mb-2
 active
 "
+data-bs-toggle="tab"
+data-bs-target="#profile"
+type="button"
 >
 
 👤 Profile
 
-</a>
+</button>
 
-<a
-href="#images"
+<button
 class="
 list-group-item
 list-group-item-action
-border-0
 rounded-3
 mb-2
 "
+data-bs-toggle="tab"
+data-bs-target="#images"
+type="button"
 >
 
 🖼 Avatar & Banner
 
-</a>
+</button>
 
-<a
-href="#security"
+<button
 class="
 list-group-item
 list-group-item-action
-border-0
 rounded-3
 mb-2
 "
+data-bs-toggle="tab"
+data-bs-target="#security"
+type="button"
 >
 
 🔒 Security
 
-</a>
+</button>
 
-<a
-href="#danger"
+<button
 class="
 list-group-item
 list-group-item-action
-border-0
 rounded-3
 text-danger
 "
+data-bs-toggle="tab"
+data-bs-target="#danger"
+type="button"
 >
 
 ⚠ Danger Zone
 
-</a>
+</button>
 
 </div>
 
@@ -110,87 +107,157 @@ text-danger
 
 <div class="col-lg-9">
 
+<div class="tab-content">
+
+
+
 <div
+class="
+tab-pane
+fade
+show
+active
+"
 id="profile"
+>
+
+<div
 class="
 card
 border-0
 shadow-sm
 rounded-4
-mb-4
 "
 >
 
-<div class="card-body p-4">
+<div class="card-body p-5">
 
-<h3
+<div
 class="
-fw-bold
+d-flex
+justify-content-between
+align-items-center
 mb-4
+flex-wrap
+gap-3
 "
 >
+
+<div>
+
+<h2 class="fw-bold mb-1">
 
 Profile Information
 
-</h3>
+</h2>
 
-<form>
+<p class="text-secondary mb-0">
+
+Manage your marketplace identity.
+
+</p>
+
+</div>
+
+@if(session('success'))
+
+<div
+class="
+alert
+alert-success
+border-0
+rounded-4
+mb-0
+px-4
+py-3
+shadow-sm
+"
+>
+
+<i class="bi bi-check-circle-fill me-2"></i>
+
+{{ session('success') }}
+
+</div>
+
+@endif
+
+</div>
+
+
+<form
+method="POST"
+action="{{ route('settings.profile') }}"
+enctype="multipart/form-data"
+>
+
+@csrf
 
 <div class="row g-4">
 
 <div class="col-md-6">
 
-<label class="form-label">
+<label class="form-label fw-semibold">
 
 Display Name
 
 </label>
 
 <input
-class="form-control"
-value="{{ Auth::user()->name }}"
+name="name"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+value="{{ old('name',Auth::user()->name) }}"
 >
 
 </div>
 
-
 <div class="col-md-6">
 
-<label class="form-label">
+<label class="form-label fw-semibold">
 
 City
 
 </label>
 
 <input
-class="form-control"
-placeholder="Warsaw"
-value="{{ Auth::user()->city }}"
+name="city"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+value="{{ old('city',Auth::user()->city) }}"
 >
 
 </div>
 
-
 <div class="col-md-6">
 
-<label class="form-label">
+<label class="form-label fw-semibold">
 
 Phone
 
 </label>
 
 <input
-class="form-control"
-placeholder="+48..."
-value="{{ Auth::user()->phone }}"
+name="phone"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+value="{{ old('phone',Auth::user()->phone) }}"
 >
 
 </div>
 
-
 <div class="col-md-6">
 
-<label class="form-label">
+<label class="form-label fw-semibold">
 
 Email
 
@@ -198,44 +265,61 @@ Email
 
 <input
 disabled
-class="form-control"
+class="
+form-control
+form-control-lg
+rounded-4
+bg-light
+"
 value="{{ Auth::user()->email }}"
 >
 
 </div>
 
-
 <div class="col-12">
 
-<label class="form-label">
+<label class="form-label fw-semibold">
 
 Bio
 
 </label>
 
 <textarea
-rows="4"
-class="form-control"
->{{ Auth::user()->bio }}</textarea>
+name="bio"
+rows="5"
+class="
+form-control
+rounded-4
+"
+>{{ old('bio',Auth::user()->bio) }}</textarea>
 
 </div>
 
 </div>
+
+<div class="mt-4">
 
 <button
 class="
 btn
 btn-primary
-mt-4
-px-4
+btn-lg
+rounded-4
+px-5
 "
 >
+
+<i class="bi bi-save me-2"></i>
 
 Save Changes
 
 </button>
 
+</div>
+
 </form>
+
+</div>
 
 </div>
 
@@ -244,57 +328,182 @@ Save Changes
 
 
 <div
+class="
+tab-pane
+fade
+"
 id="images"
+>
+
+<div
 class="
 card
 border-0
 shadow-sm
 rounded-4
-mb-4
 "
 >
 
-<div class="card-body p-4">
+<div class="card-body p-5">
 
-<h3
-class="
-fw-bold
-mb-4
-"
->
+<h3 class="fw-bold mb-4">
 
 Avatar & Banner
 
 </h3>
 
-<div class="row g-4">
+<p class="text-secondary">
+
+Customize your marketplace profile.
+
+</p>
+
+<form
+method="POST"
+action="{{ route('settings.profile') }}"
+enctype="multipart/form-data"
+>
+
+@csrf
+
+<div class="row g-5 mt-2">
 
 <div class="col-md-6">
 
-<label>
+<label class="fw-semibold mb-3">
 
-Avatar
+Current Avatar
 
 </label>
 
+<div class="mb-3">
+
+@if(Auth::user()->avatar)
+
+<img
+
+src="{{ asset('storage/' . Auth::user()->avatar) }}"
+
+class="
+rounded-circle
+shadow
+border
+"
+
+style="
+width:120px;
+height:120px;
+object-fit:cover;
+"
+>
+
+@else
+
+<div
+class="
+rounded-circle
+bg-primary
+text-white
+d-flex
+align-items-center
+justify-content-center
+fw-bold
+shadow
+"
+style="
+width:120px;
+height:120px;
+font-size:42px;
+"
+>
+
+{{ strtoupper(substr(Auth::user()->name,0,1)) }}
+
+</div>
+
+@endif
+
+</div>
+
 <input
+name="avatar"
 type="file"
-class="form-control"
+class="
+form-control
+rounded-4
+"
 >
 
 </div>
 
+
+
 <div class="col-md-6">
 
-<label>
+<label class="fw-semibold mb-3">
 
-Banner
+Current Banner
 
 </label>
 
+<div class="mb-3">
+
+@if(Auth::user()->banner)
+
+<img
+
+src="{{ asset('storage/' . Auth::user()->banner) }}"
+
+class="
+rounded-4
+shadow
+w-100
+"
+
+style="
+height:140px;
+object-fit:cover;
+"
+>
+
+@else
+
+<div
+class="
+rounded-4
+d-flex
+align-items-center
+justify-content-center
+text-white
+fw-bold
+shadow
+"
+style="
+height:140px;
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#0f172a
+);
+"
+>
+
+NO BANNER
+
+</div>
+
+@endif
+
+</div>
+
 <input
+name="banner"
 type="file"
-class="form-control"
+class="
+form-control
+rounded-4
+"
 >
 
 </div>
@@ -305,13 +514,19 @@ class="form-control"
 class="
 btn
 btn-dark
-mt-4
+rounded-4
+mt-5
+px-4
 "
 >
 
 Upload Images
 
 </button>
+
+</form>
+
+</div>
 
 </div>
 
@@ -320,56 +535,106 @@ Upload Images
 
 
 <div
+class="
+tab-pane
+fade
+"
 id="security"
+>
+
+<div
 class="
 card
 border-0
 shadow-sm
 rounded-4
-mb-4
 "
 >
 
-<div class="card-body p-4">
+<div class="card-body p-5">
 
-<h3
+<div
+class="
+d-flex
+justify-content-between
+align-items-center
+mb-4
+flex-wrap
+gap-3
+"
+>
+
+<div>
+
+<h2
 class="
 fw-bold
-mb-4
+mb-1
 "
 >
 
 Security
 
-</h3>
+</h2>
 
-<div class="mb-3">
+<p class="text-secondary mb-0">
 
-<input
-type="password"
-placeholder="Current password"
-class="form-control"
->
+Manage account protection and privacy.
+
+</p>
 
 </div>
 
-<div class="mb-3">
-
-<input
-type="password"
-placeholder="New password"
-class="form-control"
+<span
+class="
+badge
+bg-success
+px-3
+py-2
+fs-6
+"
 >
+
+🟢 Protected
+
+</span>
 
 </div>
 
-<div class="mb-3">
 
-<input
-type="password"
-placeholder="Confirm password"
-class="form-control"
+<div
+class="
+card
+border-0
+bg-light
+rounded-4
+mb-4
+"
 >
+
+<div class="card-body">
+
+<div
+class="
+d-flex
+justify-content-between
+align-items-center
+"
+>
+
+<div>
+
+<h5 class="fw-bold">
+
+Password
+
+</h5>
+
+<p class="text-secondary mb-0">
+
+Change your account password.
+
+</p>
 
 </div>
 
@@ -377,6 +642,57 @@ class="form-control"
 class="
 btn
 btn-primary
+"
+data-bs-toggle="collapse"
+data-bs-target="#passwordPanel"
+>
+
+Change Password
+
+</button>
+
+</div>
+
+
+<div
+class="
+collapse
+mt-4
+"
+id="passwordPanel"
+>
+
+<input
+type="password"
+class="
+form-control
+mb-3
+"
+placeholder="Current password"
+>
+
+<input
+type="password"
+class="
+form-control
+mb-3
+"
+placeholder="New password"
+>
+
+<input
+type="password"
+class="
+form-control
+mb-3
+"
+placeholder="Confirm new password"
+>
+
+<button
+class="
+btn
+btn-dark
 "
 >
 
@@ -388,10 +704,131 @@ Update Password
 
 </div>
 
+</div>
 
 
 <div
+class="
+card
+border-0
+bg-light
+rounded-4
+mb-4
+"
+>
+
+<div class="card-body">
+
+<div
+class="
+d-flex
+justify-content-between
+align-items-center
+"
+>
+
+<div>
+
+<h5 class="fw-bold">
+
+Two Factor Authentication
+
+</h5>
+
+<p class="text-secondary mb-0">
+
+Extra protection for your account.
+
+</p>
+
+</div>
+
+<div
+class="
+form-check
+form-switch
+fs-5
+"
+>
+
+<input
+class="
+form-check-input
+"
+type="checkbox"
+>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="
+card
+border-0
+bg-light
+rounded-4
+"
+>
+
+<div class="card-body">
+
+<h5
+class="
+fw-bold
+mb-3
+"
+>
+
+Login Activity
+
+</h5>
+
+<div class="mb-3">
+
+🖥 Windows · Chrome
+
+<div class="text-secondary small">
+
+127.0.0.1 · Active now
+
+</div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div
+class="
+tab-pane
+fade
+"
 id="danger"
+>
+
+<div
 class="
 card
 border-danger
@@ -400,14 +837,9 @@ rounded-4
 "
 >
 
-<div class="card-body p-4">
+<div class="card-body p-5">
 
-<h3
-class="
-text-danger
-fw-bold
-"
->
+<h3 class="text-danger fw-bold">
 
 Danger Zone
 
@@ -415,7 +847,7 @@ Danger Zone
 
 <p class="text-secondary">
 
-Deleting your account permanently removes listings, rentals and marketplace history.
+Deleting your account permanently removes everything.
 
 </p>
 
@@ -423,12 +855,18 @@ Deleting your account permanently removes listings, rentals and marketplace hist
 class="
 btn
 btn-outline-danger
+rounded-4
+px-4
 "
 >
 
 Delete Account
 
 </button>
+
+</div>
+
+</div>
 
 </div>
 
