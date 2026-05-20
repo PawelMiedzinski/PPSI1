@@ -167,7 +167,7 @@ $user->save();
 
 Technical documentation available here:
 
-[MultiRental Technical Documentation](docs/MultiRental_Dokumentacja_Techniczna.pdf)
+[MultiRental Technical Documentation](docs/Dokumentacja_techniczna_MultiRental.pdf)
 
 ---
 
