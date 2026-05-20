@@ -1,47 +1,303 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<div
+class="
+container-fluid
+min-vh-100
+"
+>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<div class="row min-vh-100">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+<div
+class="
+col-lg-7
+d-none
+d-lg-flex
+flex-column
+justify-content-center
+px-5
+text-white
+"
+style="
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1e3a8a,
+#0f172a
+);
+"
+>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+<div style="max-width:600px;">
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+<div
+class="
+d-flex
+align-items-center
+gap-3
+mb-5
+"
+>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+<div
+style="
+width:80px;
+height:80px;
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+background:#2563eb;
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
+border-radius:24px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:34px;
+font-weight:800;
+"
+>
+
+MR
+
+</div>
+
+<div>
+
+<h1
+class="
+fw-bold
+mb-0
+"
+>
+
+MultiRental
+
+</h1>
+
+<div
+style="
+opacity:.8;
+"
+>
+
+Marketplace platform
+
+</div>
+
+</div>
+
+</div>
+
+<h1
+class="
+display-3
+fw-bold
+mb-4
+"
+>
+
+Rent anything.
+
+</h1>
+
+<p
+class="
+fs-4
+opacity-75
+"
+>
+
+The next generation rental marketplace.
+
+List products.
+
+Rent equipment.
+
+Build trust.
+
+</p>
+
+</div>
+
+</div>
+
+
+<div
+class="
+col-lg-5
+d-flex
+align-items-center
+justify-content-center
+p-4
+"
+style="
+background:#eef2f7;
+"
+>
+
+<div
+class="
+card
+border-0
+shadow-lg
+rounded-5
+p-5
+w-100
+"
+style="
+max-width:520px;
+"
+>
+
+<div
+class="
+text-center
+mb-5
+"
+>
+
+<h2
+class="
+fw-bold
+"
+>
+
+Welcome back
+
+</h2>
+
+<p class="text-secondary">
+
+Login to MultiRental
+
+</p>
+
+</div>
+
+<x-auth-session-status
+class="mb-4"
+:status="session('status')"
+/>
+
+<form
+method="POST"
+action="{{ route('login') }}"
+>
+
+@csrf
+
+<div class="mb-4">
+
+<label class="mb-2">
+
+Email
+
+</label>
+
+<input
+name="email"
+type="email"
+class="
+form-control
+form-control-lg
+"
+required
+>
+
+</div>
+
+<div class="mb-4">
+
+<label class="mb-2">
+
+Password
+
+</label>
+
+<input
+name="password"
+type="password"
+class="
+form-control
+form-control-lg
+"
+required
+>
+
+</div>
+
+<div
+class="
+d-flex
+justify-content-between
+mb-4
+"
+>
+
+<div>
+
+<input
+type="checkbox"
+name="remember"
+>
+
+Remember me
+
+</div>
+
+<a
+href="{{ route('password.request') }}"
+>
+
+Forgot password?
+
+</a>
+
+</div>
+
+<button
+class="
+btn
+btn-primary
+btn-lg
+w-100
+rounded-4
+"
+>
+
+Login
+
+</button>
+
+<div
+class="
+text-center
+mt-4
+"
+>
+
+No account?
+
+<a
+href="{{ route('register') }}"
+>
+
+Create one
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </x-guest-layout>
