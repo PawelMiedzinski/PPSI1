@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\AdminController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -23,13 +24,14 @@ Route::get('/me', function () {
 });
 
 
+
 // DASHBOARD
 
 Route::get(
 
 '/dashboard',
 
-function () {
+function(){
 
 $user=Auth::user();
 
@@ -89,7 +91,8 @@ compact(
 ->middleware([
 
 'auth',
-'verified'
+'verified',
+'ban'
 
 ])
 
@@ -97,7 +100,12 @@ compact(
 
 
 
-Route::middleware('auth')
+Route::middleware([
+
+'auth',
+'ban'
+
+])
 
 ->group(function(){
 
@@ -202,7 +210,6 @@ ProfileController::class,
 
 
 
-
 // SETTINGS
 
 Route::get(
@@ -217,9 +224,7 @@ return view(
 
 );
 
-}
-
-)
+})
 
 ->name('settings');
 
@@ -238,7 +243,6 @@ SettingsController::class,
 )
 
 ->name('settings.profile');
-
 
 
 
@@ -274,12 +278,9 @@ compact(
 
 );
 
-}
-
-)
+})
 
 ->name('inventory');
-
 
 
 
@@ -335,7 +336,6 @@ $user
 
 ->get();
 
-
 return view(
 
 'rentals',
@@ -349,9 +349,7 @@ compact(
 
 );
 
-}
-
-)
+})
 
 ->name('rentals');
 
@@ -425,7 +423,6 @@ RentalController::class,
 
 
 
-
 // REVIEWS
 
 Route::get(
@@ -469,7 +466,6 @@ ReviewController::class,
 
 
 
-
 // ITEMS
 
 Route::resource(
@@ -480,6 +476,25 @@ ItemController::class
 
 );
 
+
+Route::delete(
+
+'/items/{item}',
+
+[
+
+ItemController::class,
+'destroy'
+
+]
+
+)
+
+->name(
+
+'items.destroy'
+
+);
 
 
 
@@ -537,7 +552,123 @@ MessageController::class,
 
 );
 
+});
 
+
+
+// ADMIN
+
+Route::middleware([
+
+'auth',
+'ban',
+'admin'
+
+])
+
+->prefix('admin')
+
+->group(function(){
+
+
+Route::get(
+
+'/',
+
+[
+
+AdminController::class,
+'index'
+
+]
+
+)
+
+->name(
+
+'admin.dashboard'
+
+);
+
+
+Route::get(
+
+'/users',
+
+[
+
+AdminController::class,
+'users'
+
+]
+
+)
+
+->name(
+
+'admin.users'
+
+);
+
+
+Route::patch(
+
+'/users/{user}/ban',
+
+[
+
+AdminController::class,
+'toggleBan'
+
+]
+
+)
+
+->name(
+
+'admin.users.ban'
+
+);
+
+
+Route::get(
+
+'/items',
+
+[
+
+AdminController::class,
+'items'
+
+]
+
+)
+
+->name(
+
+'admin.items'
+
+);
+
+
+Route::delete(
+
+'/items/{item}',
+
+[
+
+AdminController::class,
+'destroyItem'
+
+]
+
+)
+
+->name(
+
+'admin.items.destroy'
+
+);
 
 });
 

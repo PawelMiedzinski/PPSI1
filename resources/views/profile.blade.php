@@ -226,11 +226,40 @@ linear-gradient(
 class="
 fw-bold
 mb-2
+d-flex
+align-items-center
+gap-2
+flex-wrap
 "
 
 >
 
 {{ $user->name }}
+
+@if($user->is_admin)
+
+<span
+
+class="
+badge
+bg-danger
+px-3
+py-2
+rounded-pill
+"
+
+style="
+font-size:12px;
+letter-spacing:1px;
+"
+
+>
+
+ADMIN
+
+</span>
+
+@endif
 
 </h1>
 
@@ -275,6 +304,25 @@ py-2
 Member since {{ $user->created_at->format('Y') }}
 
 </span>
+
+@if($user->is_admin)
+
+<span
+
+class="
+badge
+bg-danger
+px-3
+py-2
+"
+
+>
+
+Administrator
+
+</span>
+
+@endif
 
 </div>
 
@@ -404,18 +452,6 @@ Items
 
 <div class="col-md-4">
 
-<a
-
-href="/rentals/user/{{ $user->id }}"
-
-class="
-text-decoration-none
-d-block
-h-100
-"
-
->
-
 <div
 
 class="
@@ -424,7 +460,6 @@ shadow-sm
 border-0
 rounded-5
 text-center
-hover-card
 h-100
 "
 
@@ -454,8 +489,6 @@ Rentals
 </div>
 
 </div>
-
-</a>
 
 </div>
 

@@ -29,6 +29,8 @@ class User extends Authenticatable
         'bio',
         'city',
         'phone',
+        'is_admin',
+        'is_banned',
     ];
 
     /**

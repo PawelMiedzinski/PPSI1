@@ -163,10 +163,36 @@ linear-gradient(
 class="
 fw-bold
 mb-2
+d-flex
+align-items-center
+gap-2
+flex-wrap
 "
 >
 
 {{ Auth::user()->name }}
+
+@if(Auth::user()->is_admin)
+
+<span
+class="
+badge
+bg-danger
+px-3
+py-2
+rounded-pill
+"
+style="
+font-size:12px;
+letter-spacing:1px;
+"
+>
+
+ADMIN
+
+</span>
+
+@endif
 
 </h1>
 
@@ -526,12 +552,10 @@ active listings
 🤝
 
 {{
-
 Auth::user()
 ->rentals()
 ->where('status','returned')
 ->count()
-
 }}
 
 completed rentals
@@ -573,11 +597,9 @@ cursor:pointer;
 .hover-card:hover{
 
 transform:
-
 translateY(-6px);
 
 box-shadow:
-
 0 15px 35px rgba(
 37,
 99,

@@ -76,17 +76,9 @@ border:
 
 >
 
-<span class="logo-m">
+<span class="logo-m">M</span>
 
-M
-
-</span>
-
-<span class="logo-r">
-
-R
-
-</span>
+<span class="logo-r">R</span>
 
 </div>
 
@@ -167,7 +159,9 @@ href="/dashboard"
 class="
 nav-link
 nav-premium
-{{ request()->is('dashboard') ? 'active-nav' : '' }}"
+{{ request()->is('dashboard') ? 'active-nav' : '' }}
+"
+
 >
 
 <i class="bi bi-grid me-2"></i>
@@ -188,7 +182,9 @@ href="/items"
 class="
 nav-link
 nav-premium
-{{ request()->is('items*') ? 'active-nav' : '' }}"
+{{ request()->is('items*') ? 'active-nav' : '' }}
+"
+
 >
 
 <i class="bi bi-search me-2"></i>
@@ -209,7 +205,9 @@ href="/inventory"
 class="
 nav-link
 nav-premium
-{{ request()->is('inventory*') ? 'active-nav' : '' }}"
+{{ request()->is('inventory*') ? 'active-nav' : '' }}
+"
+
 >
 
 <i class="bi bi-box me-2"></i>
@@ -230,7 +228,9 @@ href="/rentals"
 class="
 nav-link
 nav-premium
-{{ request()->is('rentals*') ? 'active-nav' : '' }}"
+{{ request()->is('rentals*') ? 'active-nav' : '' }}
+"
+
 >
 
 <i class="bi bi-calendar-check me-2"></i>
@@ -252,7 +252,9 @@ class="
 nav-link
 nav-premium
 position-relative
-{{ request()->is('messages*') ? 'active-nav' : '' }}"
+{{ request()->is('messages*') ? 'active-nav' : '' }}
+"
+
 >
 
 <i class="bi bi-chat-dots me-2"></i>
@@ -288,6 +290,34 @@ font-size:10px;
 </a>
 
 </li>
+
+
+@if(Auth::user()->is_admin)
+
+<li>
+
+<a
+
+href="/admin"
+
+class="
+nav-link
+nav-premium
+admin-link
+{{ request()->is('admin*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-shield-fill-check me-2"></i>
+
+Admin
+
+</a>
+
+</li>
+
+@endif
 
 </ul>
 
@@ -402,6 +432,9 @@ d-xl-block
 class="
 text-white
 fw-bold
+d-flex
+align-items-center
+gap-2
 "
 
 style="
@@ -411,6 +444,29 @@ font-size:15px;
 >
 
 {{ Auth::user()->name }}
+
+@if(Auth::user()->is_admin)
+
+<span
+
+class="
+badge
+bg-danger
+rounded-pill
+"
+
+style="
+font-size:10px;
+letter-spacing:1px;
+"
+
+>
+
+ADMIN
+
+</span>
+
+@endif
 
 </div>
 
@@ -423,7 +479,7 @@ color:#94a3b8;
 
 >
 
-Marketplace User
+{{ Auth::user()->is_admin ? 'Administrator' : 'Marketplace User' }}
 
 </div>
 
@@ -507,6 +563,33 @@ Messages
 </a>
 
 </li>
+
+
+@if(Auth::user()->is_admin)
+
+<li>
+
+<a
+
+class="
+dropdown-item
+rounded-3
+text-danger
+"
+
+href="/admin"
+
+>
+
+<i class="bi bi-shield-fill-check me-2"></i>
+
+Admin Panel
+
+</a>
+
+</li>
+
+@endif
 
 
 <li>

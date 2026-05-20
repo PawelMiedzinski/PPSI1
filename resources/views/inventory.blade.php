@@ -32,7 +32,6 @@ Manage your marketplace listings
 
 </div>
 
-
 <a
 
 href="{{ route('items.create') }}"
@@ -128,15 +127,10 @@ mt-2
 {{
 
 $items
-
 ->where(
-
 'status',
-
 'available'
-
 )
-
 ->count()
 
 }}
@@ -182,15 +176,10 @@ mt-2
 {{
 
 $items
-
 ->where(
-
 'status',
-
 'rented'
-
 )
-
 ->count()
 
 }}
@@ -250,6 +239,7 @@ items
 </div>
 
 
+
 @if($items->count())
 
 <div class="row g-4">
@@ -281,13 +271,19 @@ background:#e2e8f0;
 
 <img
 
-src="{{ asset(
-
-'storage/'.
-
+src="{{
+str_contains(
+$item->image,
+'http'
+)
+?
 $item->image
-
-) }}"
+:
+asset(
+'storage/'.
+$item->image
+)
+}}"
 
 style="
 width:100%;
@@ -341,28 +337,19 @@ mb-0
 
 </h5>
 
-
 <span
 
 class="
 badge
 
 {{
-
 $item->status
-
 ===
-
 'available'
-
 ?
-
 'bg-success'
-
 :
-
 'bg-warning'
-
 }}
 
 "
@@ -372,9 +359,7 @@ $item->status
 {{
 
 strtoupper(
-
 $item->status
-
 )
 
 }}
@@ -382,6 +367,7 @@ $item->status
 </span>
 
 </div>
+
 
 
 <p
@@ -405,6 +391,7 @@ $item->description,
 }}
 
 </p>
+
 
 
 <div
@@ -445,6 +432,7 @@ fw-normal
 </div>
 
 
+
 <div
 class="
 small
@@ -460,6 +448,7 @@ mb-4
 </div>
 
 
+
 <div
 class="
 d-flex
@@ -470,15 +459,10 @@ gap-2
 <a
 
 href="{{
-
 route(
-
 'items.show',
-
 $item
-
 )
-
 }}"
 
 class="
@@ -495,18 +479,14 @@ View
 </a>
 
 
+
 <a
 
 href="{{
-
 route(
-
 'items.edit',
-
 $item
-
 )
-
 }}"
 
 class="
@@ -520,6 +500,47 @@ rounded-4
 Edit
 
 </a>
+
+
+
+<form
+
+action="{{
+route(
+'items.destroy',
+$item
+)
+}}"
+
+method="POST"
+
+onsubmit="return confirm(
+
+'Delete this item?'
+
+)"
+
+>
+
+@csrf
+
+@method('DELETE')
+
+<button
+
+class="
+btn
+btn-danger
+rounded-4
+"
+
+>
+
+Delete
+
+</button>
+
+</form>
 
 </div>
 
@@ -609,12 +630,15 @@ transition:.25s;
 .inventory-card:hover{
 
 transform:
-
 translateY(-8px);
 
 box-shadow:
-
-0 18px 45px rgba(0,0,0,.12);
+0 18px 45px rgba(
+0,
+0,
+0,
+.12
+);
 
 }
 

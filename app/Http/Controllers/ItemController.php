@@ -45,19 +45,11 @@ class ItemController extends Controller implements HasMiddleware
 
         ]);
 
-        // SEARCH
-
-        if(
-
-            $request->filled('search')
-
-        ){
+        if($request->filled('search')){
 
             $query->where(
 
-                function($q)
-
-                use($request){
+                function($q) use($request){
 
                     $q->where(
 
@@ -85,13 +77,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // CATEGORY
-
-        if(
-
-            $request->filled('category_id')
-
-        ){
+        if($request->filled('category_id')){
 
             $query->where(
 
@@ -103,13 +89,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // LOCATION
-
-        if(
-
-            $request->filled('location')
-
-        ){
+        if($request->filled('location')){
 
             $query->where(
 
@@ -123,13 +103,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // STATUS
-
-        if(
-
-            $request->filled('status')
-
-        ){
+        if($request->filled('status')){
 
             $query->where(
 
@@ -141,13 +115,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // PRICE MIN
-
-        if(
-
-            $request->filled('min_price')
-
-        ){
+        if($request->filled('min_price')){
 
             $query->where(
 
@@ -161,13 +129,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // PRICE MAX
-
-        if(
-
-            $request->filled('max_price')
-
-        ){
+        if($request->filled('max_price')){
 
             $query->where(
 
@@ -181,13 +143,7 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        // SORTING
-
-        switch(
-
-            $request->sort
-
-        ){
+        switch($request->sort){
 
             case 'price_low':
 
@@ -244,7 +200,6 @@ class ItemController extends Controller implements HasMiddleware
             )
 
         );
-
     }
 
     public function create()
@@ -306,21 +261,34 @@ class ItemController extends Controller implements HasMiddleware
             ->route('items.index')
 
             ->with(
+
                 'success',
-                'Przedmiot został dodany.'
+
+                'Item added.'
+
             );
     }
 
-   public function show(Item $item)
+    public function show(Item $item)
     {
         $item->load([
+
             'owner',
+
             'category'
+
         ]);
 
         return view(
+
             'items.show',
-            compact('item')
+
+            compact(
+
+                'item'
+
+            )
+
         );
     }
 
@@ -361,11 +329,18 @@ class ItemController extends Controller implements HasMiddleware
 
     public function update(Request $request, Item $item)
     {
-        if ($item->owner_id !== Auth::id()) {
+        if(
+
+            $item->owner_id !== Auth::id()
+
+        ){
 
             abort(
+
                 403,
+
                 'Unauthorized access.'
+
             );
 
         }
@@ -390,10 +365,30 @@ class ItemController extends Controller implements HasMiddleware
 
         if($request->hasFile('image')){
 
-            if($item->image){
+            if(
 
-                Storage::disk('public')
-                    ->delete($item->image);
+                $item->image
+                &&
+
+                !str_contains(
+
+                    $item->image,
+
+                    'picsum.photos'
+
+                )
+
+            ){
+
+                Storage::disk(
+
+                    'public'
+
+                )->delete(
+
+                    $item->image
+
+                );
 
             }
 
@@ -408,38 +403,28 @@ class ItemController extends Controller implements HasMiddleware
 
         }
 
-        if($request->hasFile('image')){
+        $item->update(
 
-            if($item->image){
+            $validated
 
-                Storage::disk('public')
-                    ->delete($item->image);
-
-            }
-
-            $validated['image']=
-
-                $request
-                ->file('image')
-                ->store(
-                    'items',
-                    'public'
-                );
-
-        }
-
-        $item->update($validated);
+        );
 
         return redirect()
 
             ->route(
+
                 'items.show',
+
                 $item
+
             )
 
             ->with(
+
                 'success',
+
                 'Item updated.'
+
             );
     }
 
@@ -455,7 +440,34 @@ class ItemController extends Controller implements HasMiddleware
 
                 403,
 
-                'Brak uprawnień.'
+                'No access.'
+
+            );
+
+        }
+
+        if(
+
+            $item->image
+            &&
+
+            !str_contains(
+
+                $item->image,
+
+                'picsum.photos'
+
+            )
+
+        ){
+
+            Storage::disk(
+
+                'public'
+
+            )->delete(
+
+                $item->image
 
             );
 
@@ -467,7 +479,7 @@ class ItemController extends Controller implements HasMiddleware
 
             ->route(
 
-                'items.index'
+                'inventory'
 
             )
 
@@ -475,9 +487,8 @@ class ItemController extends Controller implements HasMiddleware
 
                 'success',
 
-                'Przedmiot usunięty.'
+                'Item deleted.'
 
             );
-
     }
 }
