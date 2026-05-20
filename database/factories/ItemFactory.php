@@ -49,6 +49,8 @@ class ItemFactory extends Factory
 
             ]),
 
+            'image' => 'https://picsum.photos/600/400?random='.rand(1,1000),
+
         ];
     }
 }

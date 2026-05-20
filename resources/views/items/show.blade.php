@@ -1,5 +1,45 @@
 <x-app-layout>
 
+@php
+
+$owner=$item->owner;
+
+$ownerRating=
+
+round(
+
+$owner
+->reviewsReceived()
+->avg('rating')
+
+??0,
+
+1
+
+);
+
+$ownerReviews=
+
+$owner
+->reviewsReceived()
+->count();
+
+$completedRentals=
+
+$owner
+->rentals()
+->where(
+
+'status',
+
+'returned'
+
+)
+->count();
+
+@endphp
+
+
 <div
 class="container py-5"
 style="
@@ -51,7 +91,6 @@ src="{{ asset('storage/'.$item->image) }}"
 style="
 width:100%;
 height:100%;
-
 object-fit:cover;
 
 transition:.4s;
@@ -142,39 +181,18 @@ h-100
 "
 >
 
-<div class="fs-3">📍</div>
+<div class="fs-3">
 
-<div class="small text-secondary">
-
-Location
+📦
 
 </div>
-
-<div class="fw-bold">
-
-{{ $item->location }}
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="col-3">
 
 <div
 class="
-bg-light
-rounded-4
-p-3
-h-100
+small
+text-secondary
 "
 >
-
-<div class="fs-3">📦</div>
-
-<div class="small text-secondary">
 
 Category
 
@@ -202,17 +220,26 @@ h-100
 "
 >
 
-<div class="fs-3">⭐</div>
+<div class="fs-3">
 
-<div class="small text-secondary">
+📅
 
-Rating
+</div>
+
+<div
+class="
+small
+text-secondary
+"
+>
+
+Listed
 
 </div>
 
 <div class="fw-bold">
 
-5.0
+{{ $item->created_at->diffForHumans() }}
 
 </div>
 
@@ -232,17 +259,65 @@ h-100
 "
 >
 
-<div class="fs-3">🔒</div>
+<div class="fs-3">
 
-<div class="small text-secondary">
+🤝
 
-Protection
+</div>
+
+<div
+class="
+small
+text-secondary
+"
+>
+
+Rentals
 
 </div>
 
 <div class="fw-bold">
 
-Included
+{{ $completedRentals }}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="col-3">
+
+<div
+class="
+bg-light
+rounded-4
+p-3
+h-100
+"
+>
+
+<div class="fs-3">
+
+⭐
+
+</div>
+
+<div
+class="
+small
+text-secondary
+"
+>
+
+Reviews
+
+</div>
+
+<div class="fw-bold">
+
+{{ $ownerReviews }}
 
 </div>
 
@@ -260,33 +335,7 @@ Included
 
 <div class="col-lg-5">
 
-<div style="position:relative;">
-
 <div
-
-style="
-position:absolute;
-
-inset:-30px;
-
-background:
-
-radial-gradient(
-#2563eb25,
-transparent
-);
-
-filter:blur(80px);
-
-z-index:0;
-"
-
->
-
-</div>
-
-<div
-
 class="
 card
 border-0
@@ -298,8 +347,6 @@ p-4
 style="
 position:sticky;
 top:100px;
-
-z-index:2;
 "
 
 >
@@ -357,14 +404,13 @@ $item->status=='available'
 </div>
 
 
-<div
 
+<div
 class="
 display-4
 fw-bold
-mb-2
+mb-4
 "
-
 style="
 background:
 linear-gradient(
@@ -374,9 +420,9 @@ linear-gradient(
 );
 
 -webkit-background-clip:text;
+
 -webkit-text-fill-color:transparent;
 "
-
 >
 
 {{ number_format($item->price_per_day,0) }}
@@ -397,18 +443,6 @@ text-secondary
 
 </div>
 
-
-<div
-class="
-small
-text-secondary
-mb-4
-"
->
-
-📈 Trending item
-
-</div>
 
 
 <div
@@ -437,6 +471,18 @@ mb-4
 <hr>
 
 
+
+<a
+
+href="{{ route('profile.show',$owner) }}"
+
+class="
+text-decoration-none
+text-dark
+"
+
+>
+
 <div
 class="
 bg-light
@@ -454,11 +500,11 @@ gap-3
 "
 >
 
-@if($item->owner->avatar)
+@if($owner->avatar)
 
 <img
 
-src="{{ asset('storage/'.$item->owner->avatar) }}"
+src="{{ asset('storage/'.$owner->avatar) }}"
 
 style="
 width:72px;
@@ -501,11 +547,12 @@ linear-gradient(
 
 >
 
-{{ strtoupper(substr($item->owner->name,0,1)) }}
+{{ strtoupper(substr($owner->name,0,1)) }}
 
 </div>
 
 @endif
+
 
 <div>
 
@@ -516,13 +563,15 @@ fs-5
 "
 >
 
-{{ $item->owner->name }}
+{{ $owner->name }}
 
 </div>
 
 <div class="text-secondary">
 
-Marketplace User
+Member since
+
+{{ $owner->created_at->format('Y') }}
 
 </div>
 
@@ -534,19 +583,32 @@ fw-semibold
 "
 >
 
-★★★★★ 5.0
+⭐
+
+{{ $ownerRating }}
+
+(
+
+{{ $ownerReviews }}
+
+reviews
+
+)
 
 </div>
 
 <div
 class="
 small
-text-success
-fw-semibold
+text-secondary
 "
 >
 
-✓ Verified profile
+🤝
+
+{{ $completedRentals }}
+
+completed rentals
 
 </div>
 
@@ -555,6 +617,9 @@ fw-semibold
 </div>
 
 </div>
+
+</a>
+
 
 
 <div
@@ -569,16 +634,13 @@ mb-4
 
 <br>
 
-✓ Damage protection
-
-<br>
-
 ✓ Marketplace support
 
 </div>
 
 
-@if(Auth::check() && Auth::id() !== $item->owner_id)
+
+@if(Auth::check() && Auth::id()!==$item->owner_id)
 
 <a
 
@@ -587,23 +649,20 @@ href="{{ route('rentals.create',$item) }}"
 class="
 btn
 btn-primary
-
-rounded-4
-
 w-100
-
+rounded-4
 mb-3
-
-d-flex
-align-items-center
-justify-content-center
-
 fw-semibold
 "
 
 style="
 height:56px;
-font-size:18px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
 "
 
 >
@@ -612,23 +671,18 @@ Rent Now
 
 </a>
 
-
 <button
 
 class="
 btn
 btn-outline-dark
-
-rounded-4
-
 w-100
-
+rounded-4
 fw-semibold
 "
 
 style="
 height:56px;
-font-size:18px;
 "
 
 >
@@ -640,7 +694,8 @@ Message Owner
 @endif
 
 
-@if(Auth::check() && Auth::id() === $item->owner_id)
+
+@if(Auth::check() && Auth::id()===$item->owner_id)
 
 <a
 
@@ -671,8 +726,6 @@ Edit Listing
 </a>
 
 @endif
-
-</div>
 
 </div>
 
@@ -719,9 +772,7 @@ font-size:17px;
 
 </p>
 
-
 <hr class="my-5">
-
 
 <h4
 class="
@@ -736,9 +787,16 @@ Rental Details
 
 <div class="row g-4">
 
-<div class="col-md-3">
+<div class="col-md-4">
 
-<div class="bg-light rounded-4 p-4 text-center">
+<div
+class="
+bg-light
+rounded-4
+p-4
+text-center
+"
+>
 
 <div class="text-secondary">
 
@@ -746,7 +804,12 @@ Status
 
 </div>
 
-<div class="fw-bold mt-2">
+<div
+class="
+fw-bold
+mt-2
+"
+>
 
 {{ strtoupper($item->status) }}
 
@@ -757,9 +820,17 @@ Status
 </div>
 
 
-<div class="col-md-3">
 
-<div class="bg-light rounded-4 p-4 text-center">
+<div class="col-md-4">
+
+<div
+class="
+bg-light
+rounded-4
+p-4
+text-center
+"
+>
 
 <div class="text-secondary">
 
@@ -775,7 +846,9 @@ mt-2
 "
 >
 
-{{ number_format($item->price_per_day,0) }} zł
+{{ number_format($item->price_per_day,0) }}
+
+zł
 
 </div>
 
@@ -784,30 +857,17 @@ mt-2
 </div>
 
 
-<div class="col-md-3">
 
-<div class="bg-light rounded-4 p-4 text-center">
+<div class="col-md-4">
 
-<div class="text-secondary">
-
-Category
-
-</div>
-
-<div class="fw-bold mt-2">
-
-{{ $item->category->name }}
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="col-md-3">
-
-<div class="bg-light rounded-4 p-4 text-center">
+<div
+class="
+bg-light
+rounded-4
+p-4
+text-center
+"
+>
 
 <div class="text-secondary">
 
@@ -815,11 +875,22 @@ Owner
 
 </div>
 
-<div class="fw-bold mt-2">
+<a
 
-{{ $item->owner->name }}
+href="{{ route('profile.show',$owner) }}"
 
-</div>
+class="
+fw-bold
+text-decoration-none
+mt-2
+d-inline-block
+"
+
+>
+
+{{ $owner->name }}
+
+</a>
 
 </div>
 

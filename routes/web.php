@@ -30,17 +30,14 @@ Route::get(
 
     function () {
 
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $itemsCount =
-
             $user
             ->items()
             ->count();
 
         $activeRentals =
-
             $user
             ->rentals()
             ->where(
@@ -50,7 +47,6 @@ Route::get(
             ->count();
 
         $returnedRentals =
-
             $user
             ->rentals()
             ->where(
@@ -60,7 +56,6 @@ Route::get(
             ->count();
 
         $cancelledRentals =
-
             $user
             ->rentals()
             ->where(
@@ -76,11 +71,8 @@ Route::get(
             compact(
 
                 'itemsCount',
-
                 'activeRentals',
-
                 'returnedRentals',
-
                 'cancelledRentals'
 
             )
@@ -94,7 +86,6 @@ Route::get(
 ->middleware([
 
     'auth',
-
     'verified'
 
 ])
@@ -109,7 +100,7 @@ Route::middleware('auth')
 
 
 
-// Profile
+// PROFILE
 
 Route::get(
 
@@ -118,7 +109,6 @@ Route::get(
     [
 
         ProfileController::class,
-
         'edit'
 
     ]
@@ -135,7 +125,6 @@ Route::patch(
     [
 
         ProfileController::class,
-
         'update'
 
     ]
@@ -152,7 +141,6 @@ Route::delete(
     [
 
         ProfileController::class,
-
         'destroy'
 
     ]
@@ -161,6 +149,25 @@ Route::delete(
 
 ->name('profile.destroy');
 
+
+
+Route::get(
+
+    '/users/{user}',
+
+    [
+
+        ProfileController::class,
+        'show'
+
+    ]
+
+)
+
+->name('profile.show');
+
+
+
 Route::get(
 
     '/inventory/{user}',
@@ -168,7 +175,6 @@ Route::get(
     [
 
         ProfileController::class,
-
         'userItems'
 
     ]
@@ -178,6 +184,7 @@ Route::get(
 ->name('profile.items');
 
 
+
 Route::get(
 
     '/users/{user}/reviews',
@@ -185,7 +192,6 @@ Route::get(
     [
 
         ProfileController::class,
-
         'userReviews'
 
     ]
@@ -195,7 +201,8 @@ Route::get(
 ->name('profile.reviews');
 
 
-// Settings
+
+// SETTINGS
 
 Route::get(
 
@@ -223,7 +230,6 @@ Route::post(
     [
 
         SettingsController::class,
-
         'updateProfile'
 
     ]
@@ -234,7 +240,7 @@ Route::post(
 
 
 
-// Inventory
+// INVENTORY
 
 Route::get(
 
@@ -272,7 +278,7 @@ Route::get(
 
 
 
-// Rentals
+// RENTALS
 
 Route::get(
 
@@ -286,10 +292,10 @@ Route::get(
 
             $user
             ->rentals()
+
             ->where(
 
                 'status',
-
                 'active'
 
             )
@@ -318,7 +324,6 @@ Route::get(
                 [
 
                     'returned',
-
                     'cancelled'
 
                 ]
@@ -336,6 +341,7 @@ Route::get(
             ->get();
 
 
+
         return view(
 
             'rentals',
@@ -343,7 +349,6 @@ Route::get(
             compact(
 
                 'activeRentals',
-
                 'history'
 
             )
@@ -365,7 +370,6 @@ Route::post(
     [
 
         RentalController::class,
-
         'store'
 
     ]
@@ -387,7 +391,6 @@ Route::patch(
     [
 
         RentalController::class,
-
         'returnRental'
 
     ]
@@ -403,12 +406,36 @@ Route::patch(
     [
 
         RentalController::class,
-
         'cancelRental'
 
     ]
 
 );
+
+
+
+Route::get(
+
+    '/rent/{item}',
+
+    [
+
+        RentalController::class,
+        'create'
+
+    ]
+
+)
+
+->name(
+
+    'rentals.create'
+
+);
+
+
+
+// REVIEWS
 
 Route::get(
 
@@ -417,7 +444,6 @@ Route::get(
     [
 
         ReviewController::class,
-
         'create'
 
     ]
@@ -431,6 +457,7 @@ Route::get(
 );
 
 
+
 Route::post(
 
     '/reviews',
@@ -438,7 +465,6 @@ Route::post(
     [
 
         ReviewController::class,
-
         'store'
 
     ]
@@ -453,7 +479,7 @@ Route::post(
 
 
 
-// Items
+// ITEMS
 
 Route::resource(
 
@@ -463,27 +489,8 @@ Route::resource(
 
 );
 
-
-
 });
 
-Route::get(
-
-'/rent/{item}',
-
-[
-
-RentalController::class,
-
-'create'
-
-]
-
-)
-
-->middleware('auth')
-
-->name('rentals.create');
 
 
 require __DIR__.'/auth.php';
