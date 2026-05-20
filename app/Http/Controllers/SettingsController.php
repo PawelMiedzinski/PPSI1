@@ -8,119 +8,36 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
-
     public function updateProfile(Request $request)
     {
-
         $user = Auth::user();
 
-
-        if(
-
-            $request->has('name') ||
-
-            $request->has('city') ||
-
-            $request->has('phone') ||
-
-            $request->has('bio')
-
-        ){
-
+        if ($request->hasAny(['name', 'city', 'phone', 'bio'])) {
             $request->validate([
-
-                'name'=>'required|max:255',
-
-                'city'=>'nullable|max:255',
-
-                'phone'=>'nullable|max:30',
-
-                'bio'=>'nullable|max:1000',
-
+                'name' => 'required|max:255',
+                'city' => 'nullable|max:255',
+                'phone' => 'nullable|max:30',
+                'bio' => 'nullable|max:1000',
             ]);
 
-
-            $user->name = $request->name;
-
-            $user->city = $request->city;
-
-            $user->phone = $request->phone;
-
-            $user->bio = $request->bio;
-
+            $user->update($request->only(['name', 'city', 'phone', 'bio']));
         }
 
-
-
-        if($request->hasFile('avatar')){
-
-            $request->validate([
-
-                'avatar'=>'image|max:4096'
-
-            ]);
-
-
-            if($user->avatar){
-
-                Storage::disk('public')
-                    ->delete($user->avatar);
-
-            }
-
-            $user->avatar =
-
-                $request
-                ->file('avatar')
-                ->store(
-                    'avatars',
-                    'public'
-                );
-
+        if ($request->hasFile('avatar')) {
+            $request->validate(['avatar' => 'image|max:4096']);
+            if ($user->avatar) Storage::disk('public')->delete($user->avatar);
+            $user->avatar = $request->file('avatar')->store('avatars', 'public');
         }
 
-
-
-        if($request->hasFile('banner')){
-
-            $request->validate([
-
-                'banner'=>'image|max:8192'
-
-            ]);
-
-
-            if($user->banner){
-
-                Storage::disk('public')
-                    ->delete($user->banner);
-
-            }
-
-            $user->banner =
-
-                $request
-                ->file('banner')
-                ->store(
-                    'banners',
-                    'public'
-                );
-
+        if ($request->hasFile('banner')) {
+            $request->validate(['banner' => 'image|max:8192']);
+            if ($user->banner) Storage::disk('public')->delete($user->banner);
+            $user->banner = $request->file('banner')->store('banners', 'public');
         }
 
+        $user->save();
+        Auth::setUser($user->fresh());
 
-       $user->save();
-
-        Auth::setUser(
-            $user->fresh()
-        );
-
-        return back()
-        ->with(
-            'success',
-            'Settings updated successfully.'
-        );
-
+        return back()->with('success', 'Settings updated successfully.');
     }
-
 }

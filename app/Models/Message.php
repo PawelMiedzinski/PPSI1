@@ -8,50 +8,17 @@ use App\Models\Conversation;
 
 class Message extends Model
 {
+    protected $fillable = ['conversation_id', 'sender_id', 'message', 'read_at'];
 
-    protected $fillable = [
-
-        'conversation_id',
-
-        'sender_id',
-
-        'message',
-
-        'read_at'
-
-    ];
-
-
-    protected $casts = [
-
-        'read_at'=>'datetime'
-
-    ];
-
+    protected $casts = ['read_at' => 'datetime'];
 
     public function sender()
     {
-
-        return $this->belongsTo(
-
-            User::class,
-
-            'sender_id'
-
-        );
-
+        return $this->belongsTo(User::class, 'sender_id');
     }
-
 
     public function conversation()
     {
-
-        return $this->belongsTo(
-
-            Conversation::class
-
-        );
-
+        return $this->belongsTo(Conversation::class);
     }
-
 }
