@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\Models\User;
 use App\Models\Rental;
@@ -10,6 +11,7 @@ use App\Models\Item;
 
 class Review extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
 
@@ -30,7 +32,6 @@ class Review extends Model
 
     public function reviewer()
     {
-
         return $this->belongsTo(
 
             User::class,
@@ -38,13 +39,11 @@ class Review extends Model
             'user_id'
 
         );
-
     }
 
 
     public function reviewedUser()
     {
-
         return $this->belongsTo(
 
             User::class,
@@ -52,31 +51,25 @@ class Review extends Model
             'reviewed_user_id'
 
         );
-
     }
 
 
     public function rental()
     {
-
         return $this->belongsTo(
 
             Rental::class
 
         );
-
     }
 
 
     public function item()
     {
-
         return $this->belongsTo(
 
             Item::class
 
         );
-
     }
-
 }
