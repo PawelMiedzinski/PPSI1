@@ -174,7 +174,7 @@ Browse
 
 <a
 
-href="/my-items"
+href="/inventory"
 
 class="
 nav-link
@@ -196,7 +196,7 @@ Inventory
 
 <a
 
-href="/my-rentals"
+href="/rentals"
 
 class="
 nav-link

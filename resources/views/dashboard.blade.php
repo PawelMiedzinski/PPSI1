@@ -157,7 +157,7 @@ Browse Items
 
 <a
 
-href="/my-items"
+href="/inventory"
 
 class="
 btn
@@ -489,7 +489,7 @@ Edit Profile
 
 <a
 
-href="/my-items"
+href="/inventory"
 
 class="
 btn
@@ -511,7 +511,7 @@ Manage Listings
 
 <a
 
-href="/my-rentals"
+href="/rentals"
 
 class="
 btn
