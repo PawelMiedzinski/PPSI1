@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -267,78 +268,59 @@ class ItemController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
 
-            'title'=>
+            'title' => 'required|string|max:255',
 
-                'required|string|max:255',
+            'description' => 'required|string',
 
-            'description'=>
+            'price_per_day' => 'required|numeric|min:0|max:999999.99',
 
-                'required|string',
+            'location' => 'required|string|max:255',
 
-            'price_per_day'=>
+            'category_id' => 'required|exists:categories,id',
 
-                'required|numeric|min:0|max:999999.99',
-
-            'location'=>
-
-                'required|string|max:255',
-
-            'category_id'=>
-
-                'required|exists:categories,id',
+            'image' => 'nullable|image|max:8192'
 
         ]);
+
+        if($request->hasFile('image')){
+
+            $validated['image'] =
+
+                $request
+                ->file('image')
+                ->store(
+                    'items',
+                    'public'
+                );
+
+        }
 
         $validated['owner_id'] = Auth::id();
 
         $validated['status'] = 'available';
 
-        Item::create(
-
-            $validated
-
-        );
+        Item::create($validated);
 
         return redirect()
 
-            ->route(
-
-                'items.index'
-
-            )
+            ->route('items.index')
 
             ->with(
-
                 'success',
-
                 'Przedmiot został dodany.'
-
             );
-
     }
 
-    public function show(Item $item)
+   public function show(Item $item)
     {
         $item->load([
-
             'owner',
-
-            'category',
-
-            'reviews.user'
-
+            'category'
         ]);
 
         return view(
-
             'items.show',
-
-            compact(
-
-                'item'
-
-            )
-
+            compact('item')
         );
     }
 
@@ -377,82 +359,68 @@ class ItemController extends Controller implements HasMiddleware
         );
     }
 
-    public function update(
-
-        Request $request,
-
-        Item $item
-
-    ){
-
-        if(
-
-            $item->owner_id !== Auth::id()
-
-        ){
+        public function update(Request $request, Item $item)
+    {
+        if ($item->owner_id !== Auth::id()) {
 
             abort(
-
                 403,
-
-                'Brak uprawnień.'
-
+                'Unauthorized access.'
             );
 
         }
 
         $validated = $request->validate([
 
-            'title'=>
+            'title'=>'required|string|max:255',
 
-                'required|string|max:255',
+            'description'=>'required|string',
 
-            'description'=>
+            'price_per_day'=>'required|numeric|min:0',
 
-                'required|string',
+            'location'=>'required|string|max:255',
 
-            'price_per_day'=>
+            'category_id'=>'required|exists:categories,id',
 
-                'required|numeric|min:0|max:999999.99',
+            'status'=>'required|in:available,rented',
 
-            'location'=>
-
-                'required|string|max:255',
-
-            'category_id'=>
-
-                'required|exists:categories,id',
-
-            'status'=>
-
-                'required|in:available,rented',
+            'image'=>'nullable|image|max:8192'
 
         ]);
 
-        $item->update(
+        if($request->hasFile('image')){
 
-            $validated
+            if($item->image){
 
-        );
+                Storage::disk('public')
+                    ->delete($item->image);
+
+            }
+
+            $validated['image'] =
+
+                $request
+                ->file('image')
+                ->store(
+                    'items',
+                    'public'
+                );
+
+        }
+
+        $item->update($validated);
 
         return redirect()
 
             ->route(
-
                 'items.show',
-
                 $item
-
             )
 
             ->with(
-
                 'success',
-
-                'Przedmiot zaktualizowany.'
-
+                'Item updated.'
             );
-
     }
 
     public function destroy(Item $item)

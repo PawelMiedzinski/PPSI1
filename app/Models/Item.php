@@ -18,6 +18,7 @@ class Item extends Model
         'category_id',
         'owner_id',
         'status',
+        'image',
     ];
 
     public function owner(): BelongsTo
