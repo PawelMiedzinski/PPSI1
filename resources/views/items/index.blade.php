@@ -2,115 +2,8 @@
 
 <div class="container py-5">
 
-<div
-class="
-card
-border-0
-shadow-lg
-rounded-5
-overflow-hidden
-mb-5
-"
-style="
-background:
-linear-gradient(
-135deg,
-#2563eb,
-#1d4ed8,
-#0f172a
-);
-"
->
-
-<div class="card-body p-5 text-white">
-
-<div class="row align-items-center">
-
-<div class="col-lg-8">
-
-<span
-class="
-badge
-bg-light
-text-primary
-mb-3
-px-3
-py-2
-"
->
-
-MULTIRENTAL MARKETPLACE
-
-</span>
-
-<h1
-class="
-display-4
-fw-bold
-mb-3
-"
->
-
-Browse rentals.
-
-Find anything.
-
-</h1>
-
-<p
-class="
-fs-5
-opacity-75
-mb-0
-"
->
-
-Equipment.
-
-Electronics.
-
-Tools.
-
-Vehicles.
-
-Everything in one place.
-
-</p>
-
-</div>
-
-<div
-class="
-col-lg-4
-text-end
-d-none
-d-lg-block
-"
->
-
-<div
-style="
-font-size:120px;
-font-weight:900;
-opacity:.08;
-"
->
-
-MR
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div
+<form
+method="GET"
 class="
 card
 border-0
@@ -121,89 +14,56 @@ mb-5
 "
 >
 
-<form>
-
 <div class="row g-3">
 
 <div class="col-lg-5">
 
 <input
-
 name="search"
-
 value="{{ request('search') }}"
-
 placeholder="Search items..."
-
 class="
 form-control
 form-control-lg
 rounded-4
 "
-
 >
 
 </div>
-
 
 <div class="col-lg-3">
 
 <input
-
 name="location"
-
 value="{{ request('location') }}"
-
 placeholder="Location"
-
 class="
 form-control
 form-control-lg
 rounded-4
 "
-
 >
 
 </div>
 
-
 <div class="col-lg-2">
 
 <select
-
 name="status"
-
 class="
 form-select
 form-select-lg
 rounded-4
 "
-
 >
 
 <option value="">
-
 All statuses
-
 </option>
 
 <option
 value="available"
-
-{{
-
-request('status')=='available'
-
-?
-
-'selected'
-
-:
-
-''
-
-}}
-
+{{ request('status')=='available'?'selected':'' }}
 >
 
 Available
@@ -212,21 +72,7 @@ Available
 
 <option
 value="rented"
-
-{{
-
-request('status')=='rented'
-
-?
-
-'selected'
-
-:
-
-''
-
-}}
-
+{{ request('status')=='rented'?'selected':'' }}
 >
 
 Rented
@@ -236,7 +82,6 @@ Rented
 </select>
 
 </div>
-
 
 <div class="col-lg-2">
 
@@ -259,8 +104,6 @@ Search
 </div>
 
 </form>
-
-</div>
 
 
 
@@ -319,50 +162,56 @@ style="
 height:240px;
 background:#e2e8f0;
 position:relative;
+overflow:hidden;
 "
 >
 
-@if($item->image)
-
 <img
 
-src="{{ asset(
-
-'storage/'.
+src="{{
 
 $item->image
 
-) }}"
+?
+
+(
+Str::startsWith(
+$item->image,
+['http://','https://']
+)
+
+?
+
+$item->image
+
+:
+
+asset(
+'storage/'.$item->image
+)
+
+)
+
+:
+
+'https://picsum.photos/600/400?random='.$item->id
+
+}}"
 
 style="
 width:100%;
 height:100%;
-
 object-fit:cover;
 "
 
->
+loading="lazy"
 
-@else
-
-<div
-class="
-d-flex
-justify-content-center
-align-items-center
-h-100
-text-secondary
-fs-1
+onerror="
+this.onerror=null;
+this.src='https://picsum.photos/600/400?random={{ $item->id + 999 }}';
 "
+
 >
-
-📦
-
-</div>
-
-@endif
-
-
 
 <div
 style="
@@ -428,11 +277,8 @@ small
 {{
 
 Str::limit(
-
 $item->description,
-
 90
-
 )
 
 }}
@@ -461,11 +307,8 @@ fs-3
 >
 
 {{ number_format(
-
 $item->price_per_day,
-
 0
-
 ) }}
 
 zł
@@ -493,23 +336,13 @@ text-secondary
 "
 >
 
-📍
-
-{{
-
-$item->location
-
-}}
+📍 {{ $item->location }}
 
 </div>
 
 </div>
-
-
 
 <hr>
-
-
 
 <div
 class="
@@ -523,17 +356,9 @@ gap-3
 
 <img
 
-src="{{
-
-asset(
-
-'storage/'.
-
-$item->owner->avatar
-
-)
-
-}}"
+src="{{ asset(
+'storage/'.$item->owner->avatar
+) }}"
 
 style="
 width:48px;
@@ -566,29 +391,17 @@ font-weight:700;
 "
 >
 
-{{
-
-strtoupper(
-
+{{ strtoupper(
 substr(
-
 $item->owner->name,
-
 0,
-
 1
-
 )
-
-)
-
-}}
+) }}
 
 </div>
 
 @endif
-
-
 
 <div>
 
@@ -598,11 +411,7 @@ fw-semibold
 "
 >
 
-{{
-
-$item->owner->name
-
-}}
+{{ $item->owner->name }}
 
 </div>
 
@@ -621,16 +430,11 @@ Marketplace User
 
 </div>
 
-
-
 <a
 
 href="{{ route(
-
 'items.show',
-
 $item
-
 ) }}"
 
 class="
@@ -726,7 +530,6 @@ items
 
 </div>
 
-
 <div>
 
 {{ $items->withQueryString()->links() }}
@@ -734,90 +537,6 @@ items
 </div>
 
 </div>
-
-
-
-<style>
-
-.pagination{
-
-gap:10px;
-
-margin:0;
-
-}
-
-.pagination .page-item .page-link{
-
-border:none;
-
-width:48px;
-
-height:48px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:16px;
-
-background:#fff;
-
-color:#1e293b;
-
-font-weight:700;
-
-box-shadow:
-
-0 4px 12px rgba(0,0,0,.06);
-
-transition:.2s;
-
-}
-
-.pagination .page-item .page-link:hover{
-
-transform:translateY(-2px);
-
-background:#2563eb;
-
-color:white;
-
-}
-
-.pagination .page-item.active .page-link{
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#2563eb,
-
-#1d4ed8
-
-);
-
-color:white;
-
-box-shadow:
-
-0 10px 25px rgba(37,99,235,.35);
-
-}
-
-.pagination .page-item.disabled .page-link{
-
-opacity:.35;
-
-background:#f1f5f9;
-
-}
-
-</style>
 
 </div>
 
@@ -834,12 +553,38 @@ transition:.25s;
 .market-card:hover{
 
 transform:
-
 translateY(-8px);
 
 box-shadow:
-
 0 20px 45px rgba(0,0,0,.12);
+
+}
+
+.pagination{
+
+gap:10px;
+
+margin:0;
+
+}
+
+.pagination .page-item .page-link{
+
+border:none;
+
+width:48px;
+height:48px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+border-radius:16px;
+
+background:#fff;
+
+font-weight:700;
 
 }
 
