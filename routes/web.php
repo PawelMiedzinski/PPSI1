@@ -337,6 +337,12 @@ Route::post(
 
     ]
 
+)
+
+->name(
+
+    'rentals.store'
+
 );
 
 
@@ -386,6 +392,24 @@ Route::resource(
 
 
 });
+
+Route::get(
+
+'/rent/{item}',
+
+[
+
+RentalController::class,
+
+'create'
+
+]
+
+)
+
+->middleware('auth')
+
+->name('rentals.create');
 
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,16 @@
 <x-app-layout>
 
-<div class="container py-5">
+<div
+class="container py-5"
+style="
+background:
+linear-gradient(
+180deg,
+#eef2f7,
+#f8fafc
+);
+"
+>
 
 <div class="row g-5">
 
@@ -13,13 +23,22 @@ border-0
 shadow-lg
 rounded-5
 overflow-hidden
+mb-4
 "
 >
 
 <div
 style="
-height:520px;
-background:#e2e8f0;
+height:460px;
+
+background:
+linear-gradient(
+135deg,
+#edf2f7,
+#f8fafc
+);
+
+overflow:hidden;
 "
 >
 
@@ -34,6 +53,16 @@ width:100%;
 height:100%;
 
 object-fit:cover;
+
+transition:.4s;
+"
+
+onmouseover="
+this.style.transform='scale(1.03)'
+"
+
+onmouseout="
+this.style.transform='scale(1)'
 "
 
 >
@@ -42,20 +71,184 @@ object-fit:cover;
 
 <div
 class="
+h-100
 d-flex
+flex-column
 justify-content-center
 align-items-center
-h-100
-text-secondary
-fs-1
 "
 >
 
-📦 No image
+<div
+style="
+font-size:85px;
+opacity:.35;
+"
+>
+
+📦
+
+</div>
+
+<div
+class="
+fw-bold
+fs-3
+mt-3
+text-dark
+"
+>
+
+No photos uploaded
+
+</div>
+
+<div class="text-secondary">
+
+Owner has not added images yet
+
+</div>
 
 </div>
 
 @endif
+
+</div>
+
+</div>
+
+
+
+<div
+class="
+card
+border-0
+shadow-sm
+rounded-5
+p-4
+"
+>
+
+<div class="row text-center g-3">
+
+<div class="col-3">
+
+<div
+class="
+bg-light
+rounded-4
+p-3
+h-100
+"
+>
+
+<div class="fs-3">📍</div>
+
+<div class="small text-secondary">
+
+Location
+
+</div>
+
+<div class="fw-bold">
+
+{{ $item->location }}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="col-3">
+
+<div
+class="
+bg-light
+rounded-4
+p-3
+h-100
+"
+>
+
+<div class="fs-3">📦</div>
+
+<div class="small text-secondary">
+
+Category
+
+</div>
+
+<div class="fw-bold">
+
+{{ $item->category->name }}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="col-3">
+
+<div
+class="
+bg-light
+rounded-4
+p-3
+h-100
+"
+>
+
+<div class="fs-3">⭐</div>
+
+<div class="small text-secondary">
+
+Rating
+
+</div>
+
+<div class="fw-bold">
+
+5.0
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="col-3">
+
+<div
+class="
+bg-light
+rounded-4
+p-3
+h-100
+"
+>
+
+<div class="fs-3">🔒</div>
+
+<div class="small text-secondary">
+
+Protection
+
+</div>
+
+<div class="fw-bold">
+
+Included
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -67,16 +260,48 @@ fs-1
 
 <div class="col-lg-5">
 
+<div style="position:relative;">
+
 <div
+
+style="
+position:absolute;
+
+inset:-30px;
+
+background:
+
+radial-gradient(
+#2563eb25,
+transparent
+);
+
+filter:blur(80px);
+
+z-index:0;
+"
+
+>
+
+</div>
+
+<div
+
 class="
 card
 border-0
 shadow-lg
 rounded-5
-p-5
-sticky-top
+p-4
 "
-style="top:100px;"
+
+style="
+position:sticky;
+top:100px;
+
+z-index:2;
+"
+
 >
 
 <div
@@ -103,7 +328,9 @@ mb-0
 
 class="
 badge
-fs-6
+rounded-pill
+px-3
+py-2
 
 {{
 
@@ -123,7 +350,48 @@ $item->status=='available'
 
 >
 
-{{ strtoupper($item->status) }}
+{{ ucfirst($item->status) }}
+
+</span>
+
+</div>
+
+
+<div
+
+class="
+display-4
+fw-bold
+mb-2
+"
+
+style="
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#60a5fa
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+"
+
+>
+
+{{ number_format($item->price_per_day,0) }}
+
+zł
+
+<span
+class="
+fs-5
+fw-normal
+text-secondary
+"
+>
+
+/ day
 
 </span>
 
@@ -132,34 +400,13 @@ $item->status=='available'
 
 <div
 class="
-text-primary
-fw-bold
-display-5
-mb-3
-"
->
-
-{{ number_format(
-
-$item->price_per_day,
-
-0
-
-) }}
-
-zł
-
-<span
-class="
-fs-5
+small
 text-secondary
-fw-normal
+mb-4
 "
 >
 
-/ day
-
-</span>
+📈 Trending item
 
 </div>
 
@@ -175,32 +422,35 @@ mb-4
 
 <div>
 
-📍
-
-{{ $item->location }}
+📍 {{ $item->location }}
 
 </div>
 
 <div>
 
-📦
-
-{{ $item->category->name }}
+📦 {{ $item->category->name }}
 
 </div>
 
 </div>
-
 
 <hr>
 
 
 <div
 class="
+bg-light
+rounded-5
+p-4
+mb-4
+"
+>
+
+<div
+class="
 d-flex
 align-items-center
 gap-3
-mb-4
 "
 >
 
@@ -208,21 +458,11 @@ mb-4
 
 <img
 
-src="{{
-
-asset(
-
-'storage/'.
-
-$item->owner->avatar
-
-)
-
-}}"
+src="{{ asset('storage/'.$item->owner->avatar) }}"
 
 style="
-width:70px;
-height:70px;
+width:72px;
+height:72px;
 
 border-radius:50%;
 
@@ -234,48 +474,38 @@ object-fit:cover;
 @else
 
 <div
+
+class="
+rounded-circle
+text-white
+fw-bold
+
+d-flex
+justify-content-center
+align-items-center
+"
+
 style="
-width:70px;
-height:70px;
-
-background:#2563eb;
-
-border-radius:50%;
-
-display:flex;
-align-items:center;
-justify-content:center;
+width:72px;
+height:72px;
 
 font-size:28px;
 
-font-weight:700;
-
-color:white;
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#60a5fa
+);
 "
+
 >
 
-{{
-
-strtoupper(
-
-substr(
-
-$item->owner->name,
-
-0,
-
-1
-
-)
-
-)
-
-}}
+{{ strtoupper(substr($item->owner->name,0,1)) }}
 
 </div>
 
 @endif
-
 
 <div>
 
@@ -296,94 +526,142 @@ Marketplace User
 
 </div>
 
-@if($item->owner->city)
+<div
+class="
+small
+text-warning
+fw-semibold
+"
+>
 
-<div class="small text-secondary">
-
-📍 {{ $item->owner->city }}
-
-</div>
-
-@endif
-
-</div>
+★★★★★ 5.0
 
 </div>
 
+<div
+class="
+small
+text-success
+fw-semibold
+"
+>
 
-@if(
+✓ Verified profile
 
-Auth::check()
+</div>
 
-&&
+</div>
 
-Auth::id()
+</div>
 
-!==
+</div>
 
-$item->owner_id
 
-)
+<div
+class="
+small
+text-secondary
+mb-4
+"
+>
 
-<button
+✓ Secure rental process
+
+<br>
+
+✓ Damage protection
+
+<br>
+
+✓ Marketplace support
+
+</div>
+
+
+@if(Auth::check() && Auth::id() !== $item->owner_id)
+
+<a
+
+href="{{ route('rentals.create',$item) }}"
+
 class="
 btn
 btn-primary
-btn-lg
+
 rounded-4
+
 w-100
+
 mb-3
+
+d-flex
+align-items-center
+justify-content-center
+
+fw-semibold
 "
+
+style="
+height:56px;
+font-size:18px;
+"
+
 >
 
 Rent Now
 
-</button>
+</a>
+
 
 <button
+
 class="
 btn
 btn-outline-dark
-btn-lg
+
 rounded-4
+
 w-100
+
+fw-semibold
 "
+
+style="
+height:56px;
+font-size:18px;
+"
+
 >
 
 Message Owner
 
 </button>
 
-@elseif(
+@endif
 
-Auth::check()
 
-&&
-
-Auth::id()
-
-===
-
-$item->owner_id
-
-)
+@if(Auth::check() && Auth::id() === $item->owner_id)
 
 <a
 
-href="{{ route(
-
-'items.edit',
-
-$item
-
-) }}"
+href="{{ route('items.edit',$item) }}"
 
 class="
 btn
 btn-warning
-btn-lg
-rounded-4
 w-100
+rounded-4
+fw-semibold
+"
+
+style="
+height:56px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
 "
 
 >
@@ -394,6 +672,7 @@ Edit Listing
 
 @endif
 
+</div>
 
 </div>
 
@@ -405,7 +684,7 @@ Edit Listing
 
 <div class="row mt-5">
 
-<div class="col-lg-8">
+<div class="col-12">
 
 <div
 class="
@@ -431,7 +710,7 @@ Description
 
 <p
 style="
-line-height:1.9;
+line-height:2;
 font-size:17px;
 "
 >
@@ -440,26 +719,9 @@ font-size:17px;
 
 </p>
 
-</div>
 
-</div>
+<hr class="my-5">
 
-</div>
-
-
-
-<div class="col-lg-4">
-
-<div
-class="
-card
-border-0
-shadow-sm
-rounded-5
-"
->
-
-<div class="card-body p-4">
 
 <h4
 class="
@@ -468,90 +730,100 @@ mb-4
 "
 >
 
-Rental Info
+Rental Details
 
 </h4>
 
-<div
-class="
-d-flex
-justify-content-between
-mb-3
-"
->
+<div class="row g-4">
 
-<span>
+<div class="col-md-3">
 
-Availability
+<div class="bg-light rounded-4 p-4 text-center">
 
-</span>
+<div class="text-secondary">
 
-<strong>
+Status
 
-{{ ucfirst($item->status) }}
+</div>
 
-</strong>
+<div class="fw-bold mt-2">
+
+{{ strtoupper($item->status) }}
+
+</div>
+
+</div>
 
 </div>
 
 
+<div class="col-md-3">
+
+<div class="bg-light rounded-4 p-4 text-center">
+
+<div class="text-secondary">
+
+Price
+
+</div>
+
 <div
 class="
-d-flex
-justify-content-between
-mb-3
+fw-bold
+text-primary
+mt-2
 "
 >
 
-<span>
+{{ number_format($item->price_per_day,0) }} zł
 
-Daily Price
+</div>
 
-</span>
-
-<strong>
-
-{{
-
-number_format(
-
-$item->price_per_day,
-
-0
-
-)
-
-}}
-
-zł
-
-</strong>
+</div>
 
 </div>
 
 
-<div
-class="
-d-flex
-justify-content-between
-"
->
+<div class="col-md-3">
 
-<span>
+<div class="bg-light rounded-4 p-4 text-center">
+
+<div class="text-secondary">
+
+Category
+
+</div>
+
+<div class="fw-bold mt-2">
+
+{{ $item->category->name }}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="col-md-3">
+
+<div class="bg-light rounded-4 p-4 text-center">
+
+<div class="text-secondary">
 
 Owner
 
-</span>
+</div>
 
-<strong>
+<div class="fw-bold mt-2">
 
-{{
+{{ $item->owner->name }}
 
-$item->owner->name
+</div>
 
-}}
+</div>
 
-</strong>
+</div>
 
 </div>
 
