@@ -1,100 +1,644 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
+<nav
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
+class="
+navbar
+navbar-expand-lg
+shadow-sm
+sticky-top
+"
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+style="
+background:
+rgba(15,23,42,.92);
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+backdrop-filter:
+blur(18px);
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+border-bottom:
+1px solid rgba(255,255,255,.05);
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+padding:
+14px 0;
+"
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
+>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
+<div
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+class="
+container-fluid
+px-4
+px-xxl-5
+"
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+<a
 
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+href="{{ route('dashboard') }}"
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-    </div>
+class="
+navbar-brand
+d-flex
+align-items-center
+gap-3
+me-5
+"
+
+>
+
+<div
+
+class="
+logo-mr
+rounded-4
+d-flex
+align-items-center
+justify-content-center
+shadow-lg
+flex-shrink-0
+"
+
+style="
+width:58px;
+height:58px;
+
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1d4ed8
+);
+
+border:
+2px solid rgba(255,255,255,.06);
+"
+
+>
+
+<span class="logo-m">M</span>
+
+<span class="logo-r">R</span>
+
+</div>
+
+
+<div>
+
+<div
+
+class="
+fw-bold
+fs-3
+text-white
+lh-1
+"
+
+>
+
+MultiRental
+
+</div>
+
+<div
+
+class="
+d-none
+d-xl-block
+"
+
+style="
+font-size:12px;
+color:#94a3b8;
+"
+
+>
+
+Marketplace platform
+
+</div>
+
+</div>
+
+</a>
+
+
+
+<div
+
+class="
+collapse
+navbar-collapse
+show
+"
+
+id="nav"
+
+>
+
+<ul
+
+class="
+navbar-nav
+me-auto
+gap-2
+"
+
+style="
+margin-left:60px;
+"
+
+>
+
+<li>
+
+<a
+
+href="/dashboard"
+
+class="
+nav-link
+nav-premium
+{{ request()->is('dashboard') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-grid me-2"></i>
+
+Dashboard
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+
+href="/items"
+
+class="
+nav-link
+nav-premium
+{{ request()->is('items*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-search me-2"></i>
+
+Browse
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+
+href="/inventory"
+
+class="
+nav-link
+nav-premium
+{{ request()->is('inventory*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-box me-2"></i>
+
+Inventory
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+
+href="/rentals"
+
+class="
+nav-link
+nav-premium
+{{ request()->is('rentals*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-calendar-check me-2"></i>
+
+Rentals
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+
+href="/messages"
+
+class="
+nav-link
+nav-premium
+position-relative
+{{ request()->is('messages*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-chat-dots me-2"></i>
+
+Messages
+
+@if(isset($unreadMessages) && $unreadMessages > 0)
+
+<span
+
+class="
+position-absolute
+top-0
+start-100
+translate-middle
+badge
+rounded-pill
+bg-danger
+"
+
+style="
+font-size:10px;
+"
+
+>
+
+{{ $unreadMessages }}
+
+</span>
+
+@endif
+
+</a>
+
+</li>
+
+
+@if(Auth::user()->is_admin)
+
+<li>
+
+<a
+
+href="/admin"
+
+class="
+nav-link
+nav-premium
+admin-link
+{{ request()->is('admin*') ? 'active-nav' : '' }}
+"
+
+>
+
+<i class="bi bi-shield-fill-check me-2"></i>
+
+Admin
+
+</a>
+
+</li>
+
+@endif
+
+</ul>
+
+
+
+<div
+
+class="
+d-flex
+align-items-center
+gap-4
+ms-auto
+"
+
+>
+
+<div
+
+class="
+user-premium
+d-flex
+align-items-center
+gap-3
+"
+
+>
+
+<div
+
+class="
+avatar-premium
+overflow-hidden
+flex-shrink-0
+d-flex
+align-items-center
+justify-content-center
+"
+
+style="
+width:58px;
+height:58px;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1d4ed8
+);
+
+border:
+2px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 8px 25px rgba(
+37,
+99,
+235,
+.25
+);
+"
+
+>
+
+@if(Auth::user()->avatar)
+
+<img
+
+src="{{ asset('storage/' . Auth::user()->avatar) }}"
+
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+"
+
+>
+
+@else
+
+<span
+
+style="
+font-size:24px;
+font-weight:800;
+color:white;
+"
+
+>
+
+{{ strtoupper(substr(Auth::user()->name,0,1)) }}
+
+</span>
+
+@endif
+
+</div>
+
+
+<div
+
+class="
+d-none
+d-xl-block
+"
+
+>
+
+<div
+
+class="
+text-white
+fw-bold
+d-flex
+align-items-center
+gap-2
+"
+
+style="
+font-size:15px;
+"
+
+>
+
+{{ Auth::user()->name }}
+
+@if(Auth::user()->is_admin)
+
+<span
+
+class="
+badge
+bg-danger
+rounded-pill
+"
+
+style="
+font-size:10px;
+letter-spacing:1px;
+"
+
+>
+
+ADMIN
+
+</span>
+
+@endif
+
+</div>
+
+<div
+
+style="
+font-size:12px;
+color:#94a3b8;
+"
+
+>
+
+{{ Auth::user()->is_admin ? 'Administrator' : 'Marketplace User' }}
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="dropdown">
+
+<button
+
+class="
+btn
+btn-premium
+dropdown-toggle
+px-4
+"
+
+data-bs-toggle="dropdown"
+
+>
+
+Account
+
+</button>
+
+<ul
+
+class="
+dropdown-menu
+dropdown-menu-end
+shadow-lg
+border-0
+rounded-4
+p-2
+"
+
+>
+
+<li>
+
+<a
+
+class="
+dropdown-item
+rounded-3
+"
+
+href="/profile"
+
+>
+
+<i class="bi bi-person me-2"></i>
+
+Profile
+
+</a>
+
+</li>
+
+
+<li>
+
+<a
+
+class="
+dropdown-item
+rounded-3
+"
+
+href="/messages"
+
+>
+
+<i class="bi bi-chat-dots me-2"></i>
+
+Messages
+
+</a>
+
+</li>
+
+
+@if(Auth::user()->is_admin)
+
+<li>
+
+<a
+
+class="
+dropdown-item
+rounded-3
+text-danger
+"
+
+href="/admin"
+
+>
+
+<i class="bi bi-shield-fill-check me-2"></i>
+
+Admin Panel
+
+</a>
+
+</li>
+
+@endif
+
+
+<li>
+
+<hr class="dropdown-divider">
+
+</li>
+
+
+<li>
+
+<form
+
+method="POST"
+
+action="{{ route('logout') }}"
+
+>
+
+@csrf
+
+<button
+
+class="
+dropdown-item
+text-danger
+rounded-3
+"
+
+>
+
+<i class="bi bi-box-arrow-right me-2"></i>
+
+Logout
+
+</button>
+
+</form>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </nav>

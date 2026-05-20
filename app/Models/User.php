@@ -24,10 +24,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'banner',
         'bio',
         'city',
         'phone',
-        'avatar',
+        'is_admin',
+        'is_banned',
     ];
 
     /**
@@ -56,5 +59,72 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function reviewsReceived()
+    {
+
+    return $this->hasMany(
+
+    Review::class,
+
+    'reviewed_user_id'
+
+    );
+
+    }
+
+
+    public function reviewsWritten()
+    {
+
+    return $this->hasMany(
+
+    Review::class,
+
+    'user_id'
+
+    );
+
+    }
+
+
+    public function averageRating()
+    {
+
+    return round(
+
+    $this
+
+    ->reviewsReceived()
+
+    ->avg(
+
+    'rating'
+
+    )
+
+    ??0,
+
+    1
+
+    );
+
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(
+            Conversation::class
+        );
+    }
+
+
+    public function sentMessages()
+    {
+        return $this->hasMany(
+            Message::class,
+            'sender_id'
+        );
     }
 }

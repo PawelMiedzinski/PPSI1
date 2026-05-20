@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('city')->nullable();
             $table->string('phone')->nullable();
-            $table->string('avatar')->nullable();
         });
     }
 
@@ -29,7 +28,6 @@ return new class extends Migration
                 'bio',
                 'city',
                 'phone',
-                'avatar'
             ]);
         });
     }

@@ -2,32 +2,55 @@
 
 namespace Database\Factories;
 
-use App\Models\Item;
-use App\Models\Category;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ItemFactory extends Factory
 {
-    protected $model = Item::class;
-
     public function definition(): array
     {
         return [
-           
-            'title' => ucfirst($this->faker->words(3, true)), 
-            
-            'description' => $this->faker->paragraph(3), 
-            
-            'price_per_day' => $this->faker->randomFloat(2, 10, 300), 
-            
-            'location' => $this->faker->city(), 
-            
-            'status' => $this->faker->randomElement(['available', 'available', 'rented']), 
-            
-            'category_id' => Category::inRandomOrder()->first()->id ?? 1, 
-            
-            'owner_id' => User::inRandomOrder()->first()->id ?? 1, 
+
+            'owner_id' => User::inRandomOrder()->first()->id,
+
+            'category_id' => Category::inRandomOrder()->first()->id,
+
+            'title' => fake()->randomElement([
+
+                'Canon EOS R6',
+                'PlayStation 5',
+                'Nintendo Switch',
+                'Witcher 3 PS4',
+                'GoPro Hero',
+                'DJI Drone',
+                'Mountain Bike',
+                'Gaming Laptop',
+                'Projector',
+                'VR Headset'
+
+            ]),
+
+            'description' => fake()->paragraph(),
+
+            'price_per_day' => fake()->numberBetween(
+                10,
+                300
+            ),
+
+            'location' => fake()->city(),
+
+            'status' => fake()->randomElement([
+
+                'available',
+                'available',
+                'available',
+                'rented'
+
+            ]),
+
+            'image' => 'https://picsum.photos/600/400?random='.rand(1,1000),
+
         ];
     }
 }

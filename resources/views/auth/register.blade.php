@@ -1,52 +1,396 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+<div
+class="
+container-fluid
+min-vh-100
+"
+>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<div class="row min-vh-100">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+<div
+class="
+col-lg-7
+d-none
+d-lg-flex
+flex-column
+justify-content-center
+px-5
+text-white
+"
+style="
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1e3a8a,
+#0f172a
+);
+"
+>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+<div style="max-width:650px;">
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+<div
+class="
+d-flex
+align-items-center
+gap-4
+mb-5
+"
+>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+<div
+style="
+width:88px;
+height:88px;
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+background:
+linear-gradient(
+135deg,
+#3b82f6,
+#2563eb
+);
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+border-radius:24px;
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+display:flex;
+align-items:center;
+justify-content:center;
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
+font-size:38px;
+font-weight:900;
+
+letter-spacing:-3px;
+
+box-shadow:
+0 10px 30px rgba(
+37,
+99,
+235,
+0.35
+);
+"
+>
+
+<span style="color:white;">M</span><span style="color:#bfdbfe;">R</span>
+
+</div>
+
+<div>
+
+<h1
+style="
+font-size:54px;
+font-weight:800;
+
+line-height:1;
+
+margin:0;
+
+letter-spacing:-2px;
+"
+>
+
+MultiRental
+
+</h1>
+
+<div
+style="
+font-size:22px;
+
+opacity:.78;
+
+font-weight:500;
+
+margin-top:4px;
+"
+>
+
+Marketplace platform
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<h1
+class="
+display-3
+fw-bold
+mb-4
+"
+style="
+line-height:1.05;
+"
+>
+
+Start renting smarter.
+
+</h1>
+
+<p
+class="
+fs-4
+opacity-75
+"
+>
+
+Create your account.
+
+<br>
+
+List items.
+
+Rent equipment.
+
+Build your marketplace reputation.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<div
+class="
+col-lg-5
+d-flex
+align-items-center
+justify-content-center
+p-4
+"
+style="
+background:#eef2f7;
+"
+>
+
+<div
+class="
+card
+border-0
+shadow-lg
+rounded-5
+p-5
+w-100
+"
+style="
+max-width:560px;
+"
+>
+
+<div
+class="
+text-center
+mb-4
+"
+>
+
+<h2
+class="
+fw-bold
+"
+>
+
+Create Account
+
+</h2>
+
+<p class="text-secondary">
+
+Join MultiRental
+
+</p>
+
+</div>
+
+
+
+<form
+method="POST"
+action="{{ route('register') }}"
+>
+
+@csrf
+
+
+
+<div class="mb-3">
+
+<label class="mb-2">
+
+Username
+
+</label>
+
+<input
+name="name"
+type="text"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+value="{{ old('name') }}"
+required
+>
+
+@error('name')
+
+<div class="text-danger mt-1">
+
+{{ $message }}
+
+</div>
+
+@enderror
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label class="mb-2">
+
+Email
+
+</label>
+
+<input
+name="email"
+type="email"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+value="{{ old('email') }}"
+required
+>
+
+@error('email')
+
+<div class="text-danger mt-1">
+
+{{ $message }}
+
+</div>
+
+@enderror
+
+</div>
+
+
+
+<div class="mb-3">
+
+<label class="mb-2">
+
+Password
+
+</label>
+
+<input
+name="password"
+type="password"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+required
+>
+
+@error('password')
+
+<div class="text-danger mt-1">
+
+{{ $message }}
+
+</div>
+
+@enderror
+
+</div>
+
+
+
+<div class="mb-4">
+
+<label class="mb-2">
+
+Confirm Password
+
+</label>
+
+<input
+name="password_confirmation"
+type="password"
+class="
+form-control
+form-control-lg
+rounded-4
+"
+required
+>
+
+</div>
+
+
+
+<button
+class="
+btn
+btn-primary
+btn-lg
+w-100
+rounded-4
+py-3
+fw-bold
+"
+>
+
+Create Account
+
+</button>
+
+
+
+<div
+class="
+text-center
+mt-4
+"
+>
+
+Already registered?
+
+<a
+href="{{ route('login') }}"
+>
+
+Login
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </x-guest-layout>
