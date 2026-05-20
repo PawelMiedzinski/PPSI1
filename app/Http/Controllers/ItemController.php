@@ -359,7 +359,7 @@ class ItemController extends Controller implements HasMiddleware
         );
     }
 
-        public function update(Request $request, Item $item)
+    public function update(Request $request, Item $item)
     {
         if ($item->owner_id !== Auth::id()) {
 
@@ -398,6 +398,26 @@ class ItemController extends Controller implements HasMiddleware
             }
 
             $validated['image'] =
+
+                $request
+                ->file('image')
+                ->store(
+                    'items',
+                    'public'
+                );
+
+        }
+
+        if($request->hasFile('image')){
+
+            if($item->image){
+
+                Storage::disk('public')
+                    ->delete($item->image);
+
+            }
+
+            $validated['image']=
 
                 $request
                 ->file('image')
