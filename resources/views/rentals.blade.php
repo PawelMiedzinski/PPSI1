@@ -264,11 +264,8 @@ Owner:
 {{
 
 $rental
-
 ->item
-
 ->owner
-
 ->name
 
 }}
@@ -517,6 +514,12 @@ Price
 
 </th>
 
+<th>
+
+Review
+
+</th>
+
 </tr>
 
 </thead>
@@ -532,9 +535,7 @@ Price
 {{
 
 $rental
-
 ->item
-
 ->title
 
 }}
@@ -551,7 +552,6 @@ badge
 {{
 
 $rental->status
-
 ==='returned'
 
 ?
@@ -597,6 +597,68 @@ $rental->total_price,
 }}
 
 zł
+
+</td>
+
+
+<td>
+
+@if(
+
+$rental->status==='returned'
+
+)
+
+@if(
+
+!$rental->review
+
+)
+
+<a
+
+href="{{
+
+route(
+
+'reviews.create',
+
+$rental
+
+)
+
+}}"
+
+class="
+btn
+btn-primary
+btn-sm
+rounded-4
+"
+
+>
+
+Leave Review
+
+</a>
+
+@else
+
+<span
+class="
+text-success
+fw-semibold
+small
+"
+>
+
+✓ Review submitted
+
+</span>
+
+@endif
+
+@endif
 
 </td>
 

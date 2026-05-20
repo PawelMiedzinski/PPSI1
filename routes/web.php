@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ReviewController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -160,6 +161,38 @@ Route::delete(
 
 ->name('profile.destroy');
 
+Route::get(
+
+    '/inventory/{user}',
+
+    [
+
+        ProfileController::class,
+
+        'userItems'
+
+    ]
+
+)
+
+->name('profile.items');
+
+
+Route::get(
+
+    '/users/{user}/reviews',
+
+    [
+
+        ProfileController::class,
+
+        'userReviews'
+
+    ]
+
+)
+
+->name('profile.reviews');
 
 
 // Settings
@@ -374,6 +407,47 @@ Route::patch(
         'cancelRental'
 
     ]
+
+);
+
+Route::get(
+
+    '/reviews/{rental}',
+
+    [
+
+        ReviewController::class,
+
+        'create'
+
+    ]
+
+)
+
+->name(
+
+    'reviews.create'
+
+);
+
+
+Route::post(
+
+    '/reviews',
+
+    [
+
+        ReviewController::class,
+
+        'store'
+
+    ]
+
+)
+
+->name(
+
+    'reviews.store'
 
 );
 

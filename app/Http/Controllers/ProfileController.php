@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -56,5 +57,55 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function userItems(User $user)
+    {
+        $items=
+
+        $user
+        ->items()
+        ->latest()
+        ->get();
+
+        return view(
+
+        'profile-items',
+
+        compact(
+
+        'user',
+
+        'items'
+
+        )
+
+        );
+    }
+
+
+    public function userReviews(User $user)
+    {
+        $reviews=
+
+        $user
+        ->reviewsReceived()
+        ->latest()
+        ->with('user')
+        ->get();
+
+        return view(
+
+        'profile-reviews',
+
+        compact(
+
+        'user',
+
+        'reviews'
+
+        )
+
+        );
     }
 }

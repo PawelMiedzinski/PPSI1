@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Review;
 
 class Rental extends Model
 {
@@ -44,6 +45,15 @@ class Rental extends Model
             User::class,
 
             'renter_id'
+
+        );
+    }
+
+    public function review()
+    {
+        return $this->hasOne(
+
+            Review::class
 
         );
     }

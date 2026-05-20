@@ -9,6 +9,7 @@ border-0
 shadow-lg
 rounded-5
 overflow-hidden
+mb-5
 "
 >
 
@@ -44,7 +45,6 @@ linear-gradient(
 #1e40af,
 #0f172a
 );
-
 "
 >
 
@@ -71,6 +71,7 @@ MR
 @endif
 
 </div>
+
 
 
 <div
@@ -155,6 +156,7 @@ linear-gradient(
 </div>
 
 
+
 <div class="col">
 
 <h1
@@ -220,6 +222,7 @@ Member since {{ Auth::user()->created_at->format('Y') }}
 </div>
 
 
+
 <div class="col-lg-auto">
 
 <a
@@ -229,12 +232,11 @@ btn
 btn-primary
 btn-lg
 px-4
+rounded-4
 "
 >
 
-<i class="bi bi-gear"></i>
-
-Settings
+⚙ Settings
 
 </a>
 
@@ -248,26 +250,79 @@ Settings
 
 
 
-<div class="row g-4 mt-2">
+@php
 
-<div class="col-md-3">
+$rating=
+
+round(
+
+Auth::user()
+->reviewsReceived()
+->avg('rating')
+
+??0,
+
+1
+
+);
+
+$reviews=
+
+Auth::user()
+->reviewsReceived()
+->count();
+
+@endphp
+
+
+
+<div
+class="
+row
+g-4
+justify-content-center
+mb-4
+"
+>
+
+<div class="col-md-4">
+
+<a
+
+href="/inventory/{{ Auth::id() }}"
+
+class="
+text-decoration-none
+d-block
+h-100
+"
+
+>
 
 <div
 class="
 card
 shadow-sm
 border-0
-rounded-4
+rounded-5
+text-center
+hover-card
+h-100
 "
 >
 
-<div class="card-body">
+<div class="card-body py-4">
 
-<h2>
+<h1
+class="
+fw-bold
+text-primary
+"
+>
 
 {{ Auth::user()->items()->count() }}
 
-</h2>
+</h1>
 
 <div class="text-secondary">
 
@@ -279,27 +334,37 @@ Items
 
 </div>
 
+</a>
+
 </div>
 
 
-<div class="col-md-3">
+
+<div class="col-md-4">
 
 <div
 class="
 card
 shadow-sm
 border-0
-rounded-4
+rounded-5
+text-center
+h-100
 "
 >
 
-<div class="card-body">
+<div class="card-body py-4">
 
-<h2>
+<h1
+class="
+fw-bold
+text-success
+"
+>
 
 {{ Auth::user()->rentals()->count() }}
 
-</h2>
+</h1>
 
 <div class="text-secondary">
 
@@ -314,60 +379,63 @@ Rentals
 </div>
 
 
-<div class="col-md-3">
+
+<div class="col-md-4">
+
+<a
+
+href="/users/{{ Auth::id() }}/reviews"
+
+class="
+text-decoration-none
+d-block
+h-100
+"
+
+>
 
 <div
 class="
 card
 shadow-sm
 border-0
-rounded-4
+rounded-5
+text-center
+hover-card
+h-100
 "
 >
 
-<div class="card-body">
+<div class="card-body py-4">
 
-<h2>
+<h1
+class="
+fw-bold
+text-warning
+"
+>
 
-5.0
+⭐ {{ $rating }}
 
-</h2>
+</h1>
 
 <div class="text-secondary">
 
-Rating
+Average Rating
 
 </div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="col-md-3">
 
 <div
 class="
-card
-shadow-sm
-border-0
-rounded-4
+small
+text-secondary
+mt-2
 "
 >
 
-<div class="card-body">
+{{ $reviews }}
 
-<h2>
-
-100%
-
-</h2>
-
-<div class="text-secondary">
-
-Trust Score
+reviews
 
 </div>
 
@@ -375,13 +443,15 @@ Trust Score
 
 </div>
 
-</div>
+</a>
 
 </div>
 
+</div>
 
 
-<div class="row mt-4 g-4">
+
+<div class="row mt-2 g-4">
 
 <div class="col-lg-7">
 
@@ -390,7 +460,8 @@ class="
 card
 shadow-sm
 border-0
-rounded-4
+rounded-5
+h-100
 "
 >
 
@@ -404,7 +475,7 @@ About User
 
 <hr>
 
-<p>
+<p class="mb-0">
 
 {{ Auth::user()->bio ?? 'No information provided.' }}
 
@@ -417,6 +488,7 @@ About User
 </div>
 
 
+
 <div class="col-lg-5">
 
 <div
@@ -424,7 +496,8 @@ class="
 card
 shadow-sm
 border-0
-rounded-4
+rounded-5
+h-100
 "
 >
 
@@ -432,29 +505,46 @@ rounded-4
 
 <h4>
 
-Recent Activity
+Marketplace Stats
 
 </h4>
 
 <hr>
 
-<div>
+<div class="mb-3">
 
-📦 Listed new item
+📦
+
+{{ Auth::user()->items()->count() }}
+
+active listings
+
+</div>
+
+<div class="mb-3">
+
+🤝
+
+{{
+
+Auth::user()
+->rentals()
+->where('status','returned')
+->count()
+
+}}
+
+completed rentals
 
 </div>
 
 <div>
 
-⭐ Account verified
+⭐
 
-</div>
+{{ $reviews }}
 
-<div>
-
-🚲 Rental completed
-
-</div>
+community reviews
 
 </div>
 
@@ -465,5 +555,38 @@ Recent Activity
 </div>
 
 </div>
+
+</div>
+
+
+
+<style>
+
+.hover-card{
+
+transition:.18s;
+
+cursor:pointer;
+
+}
+
+.hover-card:hover{
+
+transform:
+
+translateY(-6px);
+
+box-shadow:
+
+0 15px 35px rgba(
+37,
+99,
+235,
+0.15
+)!important;
+
+}
+
+</style>
 
 </x-app-layout>
