@@ -109,4 +109,20 @@ class User extends Authenticatable
     );
 
     }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(
+            Conversation::class
+        );
+    }
+
+
+    public function sentMessages()
+    {
+        return $this->hasMany(
+            Message::class,
+            'sender_id'
+        );
+    }
 }

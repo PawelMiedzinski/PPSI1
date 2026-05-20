@@ -2,36 +2,37 @@
 
 @php
 
-$rating=
-
+$rating =
 round(
-
 $user
 ->reviewsReceived()
 ->avg('rating')
-
-??0,
-
+?? 0,
 1
-
 );
 
-$reviews=
-
+$reviews =
 $user
 ->reviewsReceived()
 ->count();
 
-$items=
-
+$items =
 $user
 ->items()
 ->count();
 
-$rentals=
-
+$rentals =
 $user
 ->rentals()
+->count();
+
+$completedRentals =
+$user
+->rentals()
+->where(
+'status',
+'returned'
+)
 ->count();
 
 @endphp
@@ -40,6 +41,7 @@ $user
 <div class="container py-5">
 
 <div
+
 class="
 card
 border-0
@@ -48,14 +50,17 @@ rounded-5
 overflow-hidden
 mb-5
 "
+
 >
 
 <div
+
 style="
 height:260px;
 position:relative;
 overflow:hidden;
 "
+
 >
 
 @if($user->banner)
@@ -75,6 +80,7 @@ object-fit:cover;
 @else
 
 <div
+
 style="
 height:100%;
 
@@ -86,9 +92,11 @@ linear-gradient(
 #0f172a
 );
 "
+
 >
 
 <div
+
 style="
 position:absolute;
 right:50px;
@@ -100,6 +108,7 @@ font-weight:900;
 opacity:.08;
 color:white;
 "
+
 >
 
 MR
@@ -115,24 +124,29 @@ MR
 
 
 <div
+
 class="
 card-body
 px-5
 pb-5
 "
+
 >
 
 <div
+
 class="
 row
 align-items-end
 gx-5
 "
+
 >
 
 <div class="col-lg-auto">
 
 <div
+
 class="
 shadow-lg
 border
@@ -142,11 +156,13 @@ overflow-hidden
 rounded-circle
 bg-white
 "
+
 style="
 width:170px;
 height:170px;
 margin-top:-90px;
 "
+
 >
 
 @if($user->avatar)
@@ -206,10 +222,12 @@ linear-gradient(
 <div class="col">
 
 <h1
+
 class="
 fw-bold
 mb-2
 "
+
 >
 
 {{ $user->name }}
@@ -218,21 +236,25 @@ mb-2
 
 
 <div
+
 class="
 d-flex
 gap-2
 flex-wrap
 mb-3
 "
+
 >
 
 <span
+
 class="
 badge
 bg-primary
 px-3
 py-2
 "
+
 >
 
 Verified Marketplace User
@@ -240,12 +262,14 @@ Verified Marketplace User
 </span>
 
 <span
+
 class="
 badge
 bg-dark
 px-3
 py-2
 "
+
 >
 
 Member since {{ $user->created_at->format('Y') }}
@@ -273,9 +297,11 @@ Member since {{ $user->created_at->format('Y') }}
 
 <div class="col-lg-auto">
 
-@if(Auth::id()!=$user->id)
+@if(Auth::id() != $user->id)
 
-<button
+<a
+
+href="/messages/start/{{ $user->id }}"
 
 class="
 btn
@@ -283,13 +309,14 @@ btn-primary
 btn-lg
 rounded-4
 px-4
+shadow-sm
 "
 
 >
 
 ✉ Direct Message
 
-</button>
+</a>
 
 @endif
 
@@ -305,12 +332,14 @@ px-4
 
 
 <div
+
 class="
 row
 g-4
 justify-content-center
 mb-4
 "
+
 >
 
 <div class="col-md-4">
@@ -344,10 +373,12 @@ h-100
 <div class="card-body py-4">
 
 <h1
+
 class="
 fw-bold
 text-primary
 "
+
 >
 
 {{ $items }}
@@ -373,6 +404,18 @@ Items
 
 <div class="col-md-4">
 
+<a
+
+href="/rentals/user/{{ $user->id }}"
+
+class="
+text-decoration-none
+d-block
+h-100
+"
+
+>
+
 <div
 
 class="
@@ -381,6 +424,7 @@ shadow-sm
 border-0
 rounded-5
 text-center
+hover-card
 h-100
 "
 
@@ -389,10 +433,12 @@ h-100
 <div class="card-body py-4">
 
 <h1
+
 class="
 fw-bold
 text-success
 "
+
 >
 
 {{ $rentals }}
@@ -408,6 +454,8 @@ Rentals
 </div>
 
 </div>
+
+</a>
 
 </div>
 
@@ -445,10 +493,12 @@ h-100
 <div class="card-body py-4">
 
 <h1
+
 class="
 fw-bold
 text-warning
 "
+
 >
 
 ⭐ {{ $rating }}
@@ -462,11 +512,13 @@ Average Rating
 </div>
 
 <div
+
 class="
 small
 text-secondary
 mt-2
 "
+
 >
 
 {{ $reviews }}
@@ -567,14 +619,7 @@ active listings
 
 🤝
 
-{{
-
-$user
-->rentals()
-->where('status','returned')
-->count()
-
-}}
+{{ $completedRentals }}
 
 completed rentals
 
@@ -607,6 +652,7 @@ community reviews
 .hover-card{
 
 transition:.18s;
+
 cursor:pointer;
 
 }

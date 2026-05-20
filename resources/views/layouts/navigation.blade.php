@@ -16,11 +16,22 @@ blur(18px);
 
 border-bottom:
 1px solid rgba(255,255,255,.05);
+
+padding:
+14px 0;
 "
 
 >
 
-<div class="container">
+<div
+
+class="
+container-fluid
+px-4
+px-xxl-5
+"
+
+>
 
 <a
 
@@ -31,6 +42,7 @@ navbar-brand
 d-flex
 align-items-center
 gap-3
+me-5
 "
 
 >
@@ -45,6 +57,21 @@ align-items-center
 justify-content-center
 shadow-lg
 flex-shrink-0
+"
+
+style="
+width:58px;
+height:58px;
+
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#1d4ed8
+);
+
+border:
+2px solid rgba(255,255,255,.06);
 "
 
 >
@@ -62,6 +89,7 @@ R
 </span>
 
 </div>
+
 
 <div>
 
@@ -103,6 +131,7 @@ Marketplace platform
 </a>
 
 
+
 <div
 
 class="
@@ -119,8 +148,12 @@ id="nav"
 
 class="
 navbar-nav
-mx-auto
+me-auto
 gap-2
+"
+
+style="
+margin-left:60px;
 "
 
 >
@@ -134,9 +167,7 @@ href="/dashboard"
 class="
 nav-link
 nav-premium
-active-nav
-"
-
+{{ request()->is('dashboard') ? 'active-nav' : '' }}"
 >
 
 <i class="bi bi-grid me-2"></i>
@@ -157,8 +188,7 @@ href="/items"
 class="
 nav-link
 nav-premium
-"
-
+{{ request()->is('items*') ? 'active-nav' : '' }}"
 >
 
 <i class="bi bi-search me-2"></i>
@@ -179,8 +209,7 @@ href="/inventory"
 class="
 nav-link
 nav-premium
-"
-
+{{ request()->is('inventory*') ? 'active-nav' : '' }}"
 >
 
 <i class="bi bi-box me-2"></i>
@@ -201,8 +230,7 @@ href="/rentals"
 class="
 nav-link
 nav-premium
-"
-
+{{ request()->is('rentals*') ? 'active-nav' : '' }}"
 >
 
 <i class="bi bi-calendar-check me-2"></i>
@@ -213,7 +241,56 @@ Rentals
 
 </li>
 
+
+<li>
+
+<a
+
+href="/messages"
+
+class="
+nav-link
+nav-premium
+position-relative
+{{ request()->is('messages*') ? 'active-nav' : '' }}"
+>
+
+<i class="bi bi-chat-dots me-2"></i>
+
+Messages
+
+@if(isset($unreadMessages) && $unreadMessages > 0)
+
+<span
+
+class="
+position-absolute
+top-0
+start-100
+translate-middle
+badge
+rounded-pill
+bg-danger
+"
+
+style="
+font-size:10px;
+"
+
+>
+
+{{ $unreadMessages }}
+
+</span>
+
+@endif
+
+</a>
+
+</li>
+
 </ul>
+
 
 
 <div
@@ -221,7 +298,8 @@ Rentals
 class="
 d-flex
 align-items-center
-gap-3
+gap-4
+ms-auto
 "
 
 >
@@ -265,7 +343,12 @@ border:
 2px solid rgba(255,255,255,.08);
 
 box-shadow:
-0 8px 25px rgba(37,99,235,.25);
+0 8px 25px rgba(
+37,
+99,
+235,
+.25
+);
 "
 
 >
@@ -349,6 +432,7 @@ Marketplace User
 </div>
 
 
+
 <div class="dropdown">
 
 <button
@@ -357,6 +441,7 @@ class="
 btn
 btn-premium
 dropdown-toggle
+px-4
 "
 
 data-bs-toggle="dropdown"
@@ -401,11 +486,35 @@ Profile
 
 </li>
 
+
+<li>
+
+<a
+
+class="
+dropdown-item
+rounded-3
+"
+
+href="/messages"
+
+>
+
+<i class="bi bi-chat-dots me-2"></i>
+
+Messages
+
+</a>
+
+</li>
+
+
 <li>
 
 <hr class="dropdown-divider">
 
 </li>
+
 
 <li>
 

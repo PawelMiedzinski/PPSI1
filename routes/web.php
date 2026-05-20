@@ -5,6 +5,7 @@ use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\MessageController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -22,71 +23,73 @@ Route::get('/me', function () {
 });
 
 
-// Dashboard
+// DASHBOARD
 
 Route::get(
 
-    '/dashboard',
+'/dashboard',
 
-    function () {
+function () {
 
-        $user = Auth::user();
+$user=Auth::user();
 
-        $itemsCount =
-            $user
-            ->items()
-            ->count();
+$itemsCount=
 
-        $activeRentals =
-            $user
-            ->rentals()
-            ->where(
-                'status',
-                'active'
-            )
-            ->count();
+$user
+->items()
+->count();
 
-        $returnedRentals =
-            $user
-            ->rentals()
-            ->where(
-                'status',
-                'returned'
-            )
-            ->count();
+$activeRentals=
 
-        $cancelledRentals =
-            $user
-            ->rentals()
-            ->where(
-                'status',
-                'cancelled'
-            )
-            ->count();
+$user
+->rentals()
+->where(
+'status',
+'active'
+)
+->count();
 
-        return view(
+$returnedRentals=
 
-            'dashboard',
+$user
+->rentals()
+->where(
+'status',
+'returned'
+)
+->count();
 
-            compact(
+$cancelledRentals=
 
-                'itemsCount',
-                'activeRentals',
-                'returnedRentals',
-                'cancelledRentals'
+$user
+->rentals()
+->where(
+'status',
+'cancelled'
+)
+->count();
 
-            )
+return view(
 
-        );
+'dashboard',
 
-    }
+compact(
+
+'itemsCount',
+'activeRentals',
+'returnedRentals',
+'cancelledRentals'
 
 )
 
+);
+
+})
+
 ->middleware([
 
-    'auth',
-    'verified'
+'auth',
+'verified'
 
 ])
 
@@ -96,7 +99,7 @@ Route::get(
 
 Route::middleware('auth')
 
-->group(function () {
+->group(function(){
 
 
 
@@ -104,14 +107,14 @@ Route::middleware('auth')
 
 Route::get(
 
-    '/profile',
+'/profile',
 
-    [
+[
 
-        ProfileController::class,
-        'edit'
+ProfileController::class,
+'edit'
 
-    ]
+]
 
 )
 
@@ -120,14 +123,14 @@ Route::get(
 
 Route::patch(
 
-    '/profile',
+'/profile',
 
-    [
+[
 
-        ProfileController::class,
-        'update'
+ProfileController::class,
+'update'
 
-    ]
+]
 
 )
 
@@ -136,65 +139,62 @@ Route::patch(
 
 Route::delete(
 
-    '/profile',
+'/profile',
 
-    [
+[
 
-        ProfileController::class,
-        'destroy'
+ProfileController::class,
+'destroy'
 
-    ]
+]
 
 )
 
 ->name('profile.destroy');
 
 
-
 Route::get(
 
-    '/users/{user}',
+'/users/{user}',
 
-    [
+[
 
-        ProfileController::class,
-        'show'
+ProfileController::class,
+'show'
 
-    ]
+]
 
 )
 
 ->name('profile.show');
 
 
-
 Route::get(
 
-    '/inventory/{user}',
+'/inventory/{user}',
 
-    [
+[
 
-        ProfileController::class,
-        'userItems'
+ProfileController::class,
+'userItems'
 
-    ]
+]
 
 )
 
 ->name('profile.items');
 
 
-
 Route::get(
 
-    '/users/{user}/reviews',
+'/users/{user}/reviews',
 
-    [
+[
 
-        ProfileController::class,
-        'userReviews'
+ProfileController::class,
+'userReviews'
 
-    ]
+]
 
 )
 
@@ -202,21 +202,22 @@ Route::get(
 
 
 
+
 // SETTINGS
 
 Route::get(
 
-    '/settings',
+'/settings',
 
-    function(){
+function(){
 
-        return view(
+return view(
 
-            'settings'
+'settings'
 
-        );
+);
 
-    }
+}
 
 )
 
@@ -225,14 +226,14 @@ Route::get(
 
 Route::post(
 
-    '/settings/profile',
+'/settings/profile',
 
-    [
+[
 
-        SettingsController::class,
-        'updateProfile'
+SettingsController::class,
+'updateProfile'
 
-    ]
+]
 
 )
 
@@ -240,37 +241,40 @@ Route::post(
 
 
 
+
 // INVENTORY
 
 Route::get(
 
-    '/inventory',
+'/inventory',
 
-    function(){
+function(){
 
-        $user = Auth::user();
+$user=Auth::user();
 
-        $items =
+$items=
 
-            $user
-            ->items()
-            ->with(
-                'category'
-            )
-            ->latest()
-            ->get();
+$user
+->items()
+->with(
+'category'
+)
+->latest()
+->get();
 
-        return view(
+return view(
 
-            'inventory',
+'inventory',
 
-            compact(
-                'items'
-            )
+compact(
 
-        );
+'items'
 
-    }
+)
+
+);
+
+}
 
 )
 
@@ -278,160 +282,147 @@ Route::get(
 
 
 
+
 // RENTALS
 
 Route::get(
 
-    '/rentals',
+'/rentals',
 
-    function(){
+function(){
 
-        $user = Auth::user();
+$user=Auth::user();
 
-        $activeRentals =
+$activeRentals=
 
-            $user
-            ->rentals()
-
-            ->where(
-
-                'status',
-                'active'
-
-            )
-
-            ->with(
-
-                'item'
-
-            )
-
-            ->latest()
-
-            ->get();
+$user
+->rentals()
+->where(
+'status',
+'active'
+)
+->with(
+'item'
+)
+->latest()
+->get();
 
 
+$history=
 
-        $history =
+$user
+->rentals()
+->whereIn(
 
-            $user
-            ->rentals()
+'status',
 
-            ->whereIn(
+[
 
-                'status',
+'returned',
+'cancelled'
 
-                [
+]
 
-                    'returned',
-                    'cancelled'
+)
 
-                ]
+->with(
 
-            )
+'item'
 
-            ->with(
+)
 
-                'item'
+->latest()
 
-            )
-
-            ->latest()
-
-            ->get();
+->get();
 
 
+return view(
 
-        return view(
+'rentals',
 
-            'rentals',
+compact(
 
-            compact(
+'activeRentals',
+'history'
 
-                'activeRentals',
-                'history'
+)
 
-            )
+);
 
-        );
-
-    }
+}
 
 )
 
 ->name('rentals');
 
 
-
 Route::post(
 
-    '/rentals',
+'/rentals',
 
-    [
+[
 
-        RentalController::class,
-        'store'
+RentalController::class,
+'store'
 
-    ]
+]
 
 )
 
 ->name(
 
-    'rentals.store'
+'rentals.store'
 
 );
-
 
 
 Route::patch(
 
-    '/rentals/{rental}/return',
+'/rentals/{rental}/return',
 
-    [
+[
 
-        RentalController::class,
-        'returnRental'
+RentalController::class,
+'returnRental'
 
-    ]
+]
 
 );
-
 
 
 Route::patch(
 
-    '/rentals/{rental}/cancel',
+'/rentals/{rental}/cancel',
 
-    [
+[
 
-        RentalController::class,
-        'cancelRental'
+RentalController::class,
+'cancelRental'
 
-    ]
+]
 
 );
-
 
 
 Route::get(
 
-    '/rent/{item}',
+'/rent/{item}',
 
-    [
+[
 
-        RentalController::class,
-        'create'
+RentalController::class,
+'create'
 
-    ]
+]
 
 )
 
 ->name(
 
-    'rentals.create'
+'rentals.create'
 
 );
+
 
 
 
@@ -439,43 +430,43 @@ Route::get(
 
 Route::get(
 
-    '/reviews/{rental}',
+'/reviews/{rental}',
 
-    [
+[
 
-        ReviewController::class,
-        'create'
+ReviewController::class,
+'create'
 
-    ]
+]
 
 )
 
 ->name(
 
-    'reviews.create'
+'reviews.create'
 
 );
-
 
 
 Route::post(
 
-    '/reviews',
+'/reviews',
 
-    [
+[
 
-        ReviewController::class,
-        'store'
+ReviewController::class,
+'store'
 
-    ]
+]
 
 )
 
 ->name(
 
-    'reviews.store'
+'reviews.store'
 
 );
+
 
 
 
@@ -483,14 +474,72 @@ Route::post(
 
 Route::resource(
 
-    'items',
+'items',
 
-    ItemController::class
+ItemController::class
 
 );
 
-});
 
+
+
+// MESSAGES
+
+Route::get(
+
+'/messages',
+
+[
+
+MessageController::class,
+'index'
+
+]
+
+);
+
+Route::get(
+
+'/messages/start/{user}',
+
+[
+
+MessageController::class,
+'start'
+
+]
+
+);
+
+Route::get(
+
+'/messages/{conversation}',
+
+[
+
+MessageController::class,
+'show'
+
+]
+
+);
+
+Route::post(
+
+'/messages/{conversation}',
+
+[
+
+MessageController::class,
+'store'
+
+]
+
+);
+
+
+
+});
 
 
 require __DIR__.'/auth.php';

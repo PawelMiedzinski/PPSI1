@@ -2,40 +2,31 @@
 
 @php
 
-$owner=$item->owner;
+$owner = $item->owner;
 
-$ownerRating=
-
-round(
-
-$owner
-->reviewsReceived()
-->avg('rating')
-
-??0,
-
+$ownerRating = round(
+$owner->reviewsReceived()->avg('rating') ?? 0,
 1
-
 );
 
-$ownerReviews=
+$ownerReviews =
+$owner->reviewsReceived()->count();
 
-$owner
-->reviewsReceived()
+$completedRentals =
+$owner->rentals()
+->where('status','returned')
 ->count();
 
-$completedRentals=
-
-$owner
-->rentals()
-->where(
-
-'status',
-
-'returned'
-
+$image = $item->image
+? (
+Str::startsWith(
+$item->image,
+['http://','https://']
 )
-->count();
+? $item->image
+: asset('storage/'.$item->image)
+)
+: 'https://picsum.photos/1000/700?random='.$item->id;
 
 @endphp
 
@@ -69,31 +60,28 @@ mb-4
 
 <div
 style="
-height:460px;
-
-background:
-linear-gradient(
-135deg,
-#edf2f7,
-#f8fafc
-);
-
+height:500px;
+background:#edf2f7;
 overflow:hidden;
 "
 >
 
-@if($item->image)
-
 <img
 
-src="{{ asset('storage/'.$item->image) }}"
+src="{{ $image }}"
+
+loading="lazy"
+
+onerror="
+this.onerror=null;
+this.src='https://picsum.photos/1000/700?random={{ $item->id+999 }}';
+"
 
 style="
 width:100%;
 height:100%;
 object-fit:cover;
-
-transition:.4s;
+transition:.35s;
 "
 
 onmouseover="
@@ -106,56 +94,9 @@ this.style.transform='scale(1)'
 
 >
 
-@else
-
-<div
-class="
-h-100
-d-flex
-flex-column
-justify-content-center
-align-items-center
-"
->
-
-<div
-style="
-font-size:85px;
-opacity:.35;
-"
->
-
-📦
-
-</div>
-
-<div
-class="
-fw-bold
-fs-3
-mt-3
-text-dark
-"
->
-
-No photos uploaded
-
-</div>
-
-<div class="text-secondary">
-
-Owner has not added images yet
-
 </div>
 
 </div>
-
-@endif
-
-</div>
-
-</div>
-
 
 
 <div
@@ -168,9 +109,9 @@ p-4
 "
 >
 
-<div class="row text-center g-3">
+<div class="row g-3 text-center">
 
-<div class="col-3">
+<div class="col-4">
 
 <div
 class="
@@ -182,26 +123,15 @@ h-100
 >
 
 <div class="fs-3">
-
 📦
-
 </div>
 
-<div
-class="
-small
-text-secondary
-"
->
-
+<div class="small text-secondary">
 Category
-
 </div>
 
 <div class="fw-bold">
-
 {{ $item->category->name }}
-
 </div>
 
 </div>
@@ -209,7 +139,7 @@ Category
 </div>
 
 
-<div class="col-3">
+<div class="col-4">
 
 <div
 class="
@@ -221,26 +151,15 @@ h-100
 >
 
 <div class="fs-3">
-
 📅
-
 </div>
 
-<div
-class="
-small
-text-secondary
-"
->
-
+<div class="small text-secondary">
 Listed
-
 </div>
 
 <div class="fw-bold">
-
 {{ $item->created_at->diffForHumans() }}
-
 </div>
 
 </div>
@@ -248,7 +167,7 @@ Listed
 </div>
 
 
-<div class="col-3">
+<div class="col-4">
 
 <div
 class="
@@ -260,65 +179,15 @@ h-100
 >
 
 <div class="fs-3">
-
-🤝
-
+📍
 </div>
 
-<div
-class="
-small
-text-secondary
-"
->
-
-Rentals
-
+<div class="small text-secondary">
+Location
 </div>
 
 <div class="fw-bold">
-
-{{ $completedRentals }}
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="col-3">
-
-<div
-class="
-bg-light
-rounded-4
-p-3
-h-100
-"
->
-
-<div class="fs-3">
-
-⭐
-
-</div>
-
-<div
-class="
-small
-text-secondary
-"
->
-
-Reviews
-
-</div>
-
-<div class="fw-bold">
-
-{{ $ownerReviews }}
-
+{{ $item->location }}
 </div>
 
 </div>
@@ -375,9 +244,9 @@ mb-0
 
 class="
 badge
-rounded-pill
 px-3
 py-2
+rounded-pill
 
 {{
 
@@ -409,23 +278,15 @@ $item->status=='available'
 class="
 display-4
 fw-bold
-mb-4
-"
-style="
-background:
-linear-gradient(
-135deg,
-#2563eb,
-#60a5fa
-);
-
--webkit-background-clip:text;
-
--webkit-text-fill-color:transparent;
+mb-3
+text-primary
 "
 >
 
-{{ number_format($item->price_per_day,0) }}
+{{ number_format(
+$item->price_per_day,
+0
+) }}
 
 zł
 
@@ -455,15 +316,11 @@ mb-4
 >
 
 <div>
-
 📍 {{ $item->location }}
-
 </div>
 
 <div>
-
 📦 {{ $item->category->name }}
-
 </div>
 
 </div>
@@ -474,7 +331,10 @@ mb-4
 
 <a
 
-href="{{ route('profile.show',$owner) }}"
+href="{{ route(
+'profile.show',
+$owner
+) }}"
 
 class="
 text-decoration-none
@@ -489,6 +349,7 @@ bg-light
 rounded-5
 p-4
 mb-4
+owner-box
 "
 >
 
@@ -504,14 +365,15 @@ gap-3
 
 <img
 
-src="{{ asset('storage/'.$owner->avatar) }}"
+src="{{ asset(
+'storage/'.$owner->avatar
+) }}"
 
 style="
 width:72px;
 height:72px;
 
 border-radius:50%;
-
 object-fit:cover;
 "
 
@@ -521,21 +383,11 @@ object-fit:cover;
 
 <div
 
-class="
-rounded-circle
-text-white
-fw-bold
-
-d-flex
-justify-content-center
-align-items-center
-"
-
 style="
 width:72px;
 height:72px;
 
-font-size:28px;
+border-radius:50%;
 
 background:
 linear-gradient(
@@ -543,11 +395,26 @@ linear-gradient(
 #2563eb,
 #60a5fa
 );
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:28px;
+font-weight:700;
+
+color:white;
 "
 
 >
 
-{{ strtoupper(substr($owner->name,0,1)) }}
+{{ strtoupper(
+substr(
+$owner->name,
+0,
+1
+)
+) }}
 
 </div>
 
@@ -569,40 +436,17 @@ fs-5
 
 <div class="text-secondary">
 
-Member since
+⭐ {{ $ownerRating }}
 
-{{ $owner->created_at->format('Y') }}
-
-</div>
-
-<div
-class="
-small
-text-warning
-fw-semibold
-"
->
-
-⭐
-
-{{ $ownerRating }}
-
-(
+·
 
 {{ $ownerReviews }}
 
 reviews
 
-)
-
 </div>
 
-<div
-class="
-small
-text-secondary
-"
->
+<div class="small text-secondary">
 
 🤝
 
@@ -621,47 +465,33 @@ completed rentals
 </a>
 
 
-
-<div
-class="
-small
-text-secondary
-mb-4
-"
->
-
-✓ Secure rental process
-
-<br>
-
-✓ Marketplace support
-
-</div>
-
-
-
-@if(Auth::check() && Auth::id()!==$item->owner_id)
+@if(
+Auth::check()
+&&
+Auth::id()!==$item->owner_id
+)
 
 <a
 
-href="{{ route('rentals.create',$item) }}"
+href="{{ route(
+'rentals.create',
+$item
+) }}"
 
 class="
 btn
 btn-primary
 w-100
 rounded-4
-mb-3
 fw-semibold
+mb-3
 "
 
 style="
 height:56px;
 
 display:flex;
-
 align-items:center;
-
 justify-content:center;
 "
 
@@ -671,14 +501,19 @@ Rent Now
 
 </a>
 
-<button
+
+<a
+
+href="/messages/start/{{ $owner->id }}"
 
 class="
 btn
 btn-outline-dark
 w-100
 rounded-4
-fw-semibold
+d-flex
+align-items-center
+justify-content-center
 "
 
 style="
@@ -687,19 +522,25 @@ height:56px;
 
 >
 
-Message Owner
+✉ Message Owner
 
-</button>
+</a>
 
 @endif
 
 
-
-@if(Auth::check() && Auth::id()===$item->owner_id)
+@if(
+Auth::check()
+&&
+Auth::id()===$item->owner_id
+)
 
 <a
 
-href="{{ route('items.edit',$item) }}"
+href="{{ route(
+'items.edit',
+$item
+) }}"
 
 class="
 btn
@@ -713,9 +554,7 @@ style="
 height:56px;
 
 display:flex;
-
 align-items:center;
-
 justify-content:center;
 "
 
@@ -772,126 +611,6 @@ font-size:17px;
 
 </p>
 
-<hr class="my-5">
-
-<h4
-class="
-fw-bold
-mb-4
-"
->
-
-Rental Details
-
-</h4>
-
-<div class="row g-4">
-
-<div class="col-md-4">
-
-<div
-class="
-bg-light
-rounded-4
-p-4
-text-center
-"
->
-
-<div class="text-secondary">
-
-Status
-
-</div>
-
-<div
-class="
-fw-bold
-mt-2
-"
->
-
-{{ strtoupper($item->status) }}
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="col-md-4">
-
-<div
-class="
-bg-light
-rounded-4
-p-4
-text-center
-"
->
-
-<div class="text-secondary">
-
-Price
-
-</div>
-
-<div
-class="
-fw-bold
-text-primary
-mt-2
-"
->
-
-{{ number_format($item->price_per_day,0) }}
-
-zł
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="col-md-4">
-
-<div
-class="
-bg-light
-rounded-4
-p-4
-text-center
-"
->
-
-<div class="text-secondary">
-
-Owner
-
-</div>
-
-<a
-
-href="{{ route('profile.show',$owner) }}"
-
-class="
-fw-bold
-text-decoration-none
-mt-2
-d-inline-block
-"
-
->
-
-{{ $owner->name }}
-
-</a>
-
 </div>
 
 </div>
@@ -902,10 +621,23 @@ d-inline-block
 
 </div>
 
-</div>
 
-</div>
+<style>
 
-</div>
+.owner-box{
+
+transition:.2s;
+
+}
+
+.owner-box:hover{
+
+transform:translateY(-3px);
+
+background:#edf4ff!important;
+
+}
+
+</style>
 
 </x-app-layout>
