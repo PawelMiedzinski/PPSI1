@@ -45,9 +45,6 @@ return Application::configure(
     Exceptions $exceptions
 
 ): void {
-
-    //
-
 })
 
 ->create();
