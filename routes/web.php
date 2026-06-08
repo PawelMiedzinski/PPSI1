@@ -9,6 +9,9 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -21,7 +24,12 @@ Route::get('/me', function () {
 // DASHBOARD
 Route::get('/dashboard', function() {
     $user = Auth::user();
-    $itemsCount = $user->items()->count();
+    
+    Log::info("Użytkownik o ID: " . $user->id . " wszedł na swój dashboard.");
+
+    $itemsCount = Cache::remember('items_count_' . $user->id, 60, function () use ($user) {
+        return $user->items()->count();
+    });
     $activeRentals = $user->rentals()->where('status', 'active')->count();
     $returnedRentals = $user->rentals()->where('status', 'returned')->count();
     $cancelledRentals = $user->rentals()->where('status', 'cancelled')->count();
@@ -89,5 +97,16 @@ Route::middleware(['auth', 'ban', 'admin'])->prefix('admin')->group(function() {
     Route::get('/items', [AdminController::class, 'items'])->name('admin.items');
     Route::delete('/items/{item}', [AdminController::class, 'destroyItem'])->name('admin.items.destroy');
 });
+// API ENDPOINTS
+Route::get('/api/items', function () {
+    return response()->json(\App\Models\Item::all());
+});
 
-require __DIR__.'/auth.php';
+// MAILING SYSTEM
+Route::get('/test-email', function () {
+    Mail::raw('Cześć! To jest automatyczna wiadomość powitalna z naszej wypożyczalni. Cieszymy się, że jesteś z nami!', function ($message) {
+        $message->to('prowadzacy@uczelnia.pl')->subject('Witamy w systemie!');
+    });
+
+    return "E-mail został pomyślnie wygenerowany! Sprawdź logi.";
+});
