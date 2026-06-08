@@ -110,3 +110,5 @@ Route::get('/test-email', function () {
 
     return "E-mail został pomyślnie wygenerowany! Sprawdź logi.";
 });
+
+require __DIR__.'/auth.php';
